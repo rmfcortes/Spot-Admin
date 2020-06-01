@@ -1,0 +1,26 @@
+<ion-item-divider style="text-align: center;">
+    <ion-label color="primary" style="font-size: x-large;">Detalles</ion-label>
+</ion-item-divider>
+<ion-item lines="none">
+    <ion-label>
+        <h2>Nombre:
+            <ion-text color="medium">{{negocio.nombre | titlecase}}</ion-text>
+        </h2>
+        <h2>Direccion:
+            <ion-text color="medium">{{negocio.direccion.direccion | titlecase}}</ion-text>
+        </h2>
+        <h2>ID:
+            <ion-text color="medium">{{negocio.id}}</ion-text>
+        </h2>
+        <h2>Teléfono:
+            <ion-text color="medium">{{negocio.telefono}}</ion-text>
+        </h2>
+        <h2>Categoria:
+            <ion-text color="medium">{{negocio.categoria | titlecase}}</ion-text>
+        </h2>
+        <h2>Productos:
+            <ion-text color="medium">{{negocio.productos}}</ion-text>
+        </h2>
+    </ion-label>
+
+</ion-item>

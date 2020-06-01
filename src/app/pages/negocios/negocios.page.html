@@ -1,0 +1,114 @@
+<ion-header>
+  <ion-toolbar color="primary">
+      <ion-title>Negocios</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid fixed>
+      <ion-row>
+          <ion-col size="5">
+              <!-- Pick region -->
+              <app-region-selector (region_selected)="setRegion($event)"></app-region-selector>
+
+              <!-- Categoria selector -->
+              <ion-card *ngIf="region">
+                  <ng-container *ngIf="verCategorias; else catTemp">
+                      <ion-item (click)="verCategorias = false" style="background-color: var(--ion-color-primary); cursor: pointer;">
+                          <ion-label color="light">Categorias</ion-label>
+                          <ion-icon color="light" slot="end" name="chevron-up"></ion-icon>
+                      </ion-item>
+                  </ng-container>
+                  <ng-template #catTemp>
+                      <ion-item (click)="verCategorias = true" class="pointer">
+                          <ion-label color="medium" class="pointer" *ngIf="!categoria">Categorias</ion-label>
+                          <ion-label color="primary" class="pointer" *ngIf="categoria">{{categoria | titlecase}}</ion-label>
+                          <ion-icon color="medium" slot="end" name="chevron-down"></ion-icon>
+                      </ion-item>
+                  </ng-template>
+                  <!-- Lista de regiones -->
+                  <div *ngIf="verCategorias">
+                      <ion-item *ngFor="let item of categorias" (click)="setCategoria(item)">
+                          <ion-label class="pointer">{{item | titlecase}}</ion-label>
+                      </ion-item>
+                  </div>
+              </ion-card>
+
+              <!-- No hay categorias -->
+              <ion-item lines="none" style="text-align: center;" *ngIf="region && categorias.length === 0">
+                  <ion-label color="medium">No hay categorías en esta region</ion-label>
+              </ion-item>
+
+              <!-- No hay negocios -->
+              <ion-item lines="none" style="text-align: center;" *ngIf="region && categoria && negocios.length === 0 && negocios_unauthorized.length === 0">
+                  <ion-label color="medium">No hay negocios registrados en esta categoria</ion-label>
+              </ion-item>
+
+              <!-- Spinner -->
+              <ion-item lines="none" *ngIf="cargando_negocios">
+                  <ion-spinner name="dots" style="margin:auto"></ion-spinner>
+              </ion-item>
+
+              <!-- Lista negocios NO Autorizados-->
+              <ion-item-divider *ngIf="negocios_unauthorized.length > 0">
+                  <ion-label color="primary">No autorizados</ion-label>
+              </ion-item-divider>
+              <ion-item *ngFor="let item of negocios_unauthorized; trackBy: trackByUnauthorized" detail (click)="verNegocio(item)" [ngClass]="item === negocio_preview ? 'negocioSel' : 'negocio'">
+                  <ion-avatar>
+                      <img [src]="item.foto" />
+                  </ion-avatar>
+                  <ion-label>{{item.nombre}}</ion-label>
+              </ion-item>
+
+              <!-- Lista negocios Autorizados-->
+              <ion-item-divider style="margin-top: 1.5rem;" *ngIf="negocios.length > 0">
+                  <ion-label color="primary">Autorizados</ion-label>
+              </ion-item-divider>
+              <ion-item *ngFor="let item of negocios; trackBy: trackByNegocio" detail (click)="verNegocio(item)" [ngClass]="item === negocio_preview ? 'negocioSel' : 'negocio'">
+                  <ion-avatar>
+                      <img [src]="item.foto" />
+                  </ion-avatar>
+                  <ion-label>{{item.nombre}}</ion-label>
+              </ion-item>
+              <ion-button *ngIf="!noMore && negocios.length > 0" (click)="loadMoreNegocios()" expand="block" shape="round">
+                  Ver más
+              </ion-button>
+
+          </ion-col>
+
+
+          <!-- Negocio Detalles -->
+          <ion-col size="7">
+              <!-- Mapa -->
+              <agm-map style="height: 25vh;" [latitude]="centro.lat" [longitude]="centro.lng" [disableDefaultUI]="true" [streetViewControl]="false" [zoomControl]="false" [fitBounds]="true" [maxZoom]="17" [fitBoundsPadding]="10">
+                  <agm-marker *ngIf="negocio_perfil" [agmFitBounds]="true" [iconUrl]='{"url": icon_origen,"scaledSize": {"height": 40, "width": 30}}' [latitude]="negocio_perfil.direccion.lat" [longitude]="negocio_perfil.direccion.lng" [animation]="'DROP'">
+                  </agm-marker>
+              </agm-map>
+              <ion-card *ngIf="negocio_perfil">
+                  <ion-item>
+                      <ion-label>Habilitado</ion-label>
+                      <ion-toggle color="primary" [(ngModel)]="negocio_perfil.autorizado" (ionChange)="setHabilitado($event.detail.checked)"></ion-toggle>
+                  </ion-item>
+              </ion-card>
+              <ion-card *ngIf="negocio_perfil">
+                  <ion-item>
+                      <ion-label>
+                          <h2>Cuenta:
+                              <ion-text color="medium">{{negocio_perfil.cuenta | titlecase}}</ion-text>
+                          </h2>
+                      </ion-label>
+                  </ion-item>
+              </ion-card>
+              <!-- Detalles -->
+              <ion-card *ngIf="negocio_perfil">
+                  <app-negocio-selected [negocio]="negocio_perfil"></app-negocio-selected>
+              </ion-card>
+              <ion-card *ngIf="negocio_perfil">
+                  <ion-item lines="none">
+                      <ion-label color="medium" class="ion-text-wrap">{{negocio_perfil.descripcion}}</ion-label>
+                  </ion-item>
+              </ion-card>
+          </ion-col>
+      </ion-row>
+  </ion-grid>
+</ion-content>

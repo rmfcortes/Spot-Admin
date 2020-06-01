@@ -1,0 +1,21 @@
+<ion-card>
+    <ng-container *ngIf="verRegiones; else regionesTemp">
+        <ion-item (click)="verRegiones = false" style="background-color: var(--ion-color-primary); cursor: pointer;">
+            <ion-label color="light">Regiones</ion-label>
+            <ion-icon color="light" slot="end" name="chevron-up"></ion-icon>
+        </ion-item>
+    </ng-container>
+    <ng-template #regionesTemp>
+        <ion-item (click)="verRegiones = true" class="pointer">
+            <ion-label color="medium" class="pointer" *ngIf="!region">Regiones</ion-label>
+            <ion-label color="primary" class="pointer" *ngIf="region">{{region | titlecase}}</ion-label>
+            <ion-icon color="medium" slot="end" name="chevron-down"></ion-icon>
+        </ion-item>
+    </ng-template>
+    <!-- Lista de regiones -->
+    <div *ngIf="verRegiones">
+        <ion-item *ngFor="let item of regiones" (click)="setRegion(item)">
+            <ion-label class="pointer">{{item | titlecase}}</ion-label>
+        </ion-item>
+    </div>
+</ion-card>

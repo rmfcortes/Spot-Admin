@@ -1,0 +1,16 @@
+<ion-item-divider class="background-gris">
+    <ion-label color="light">{{titulo}}</ion-label>
+</ion-item-divider>
+<ion-row>
+    <ion-col size="6" *ngFor="let driver of drivers; trackBy:trackByrepartidor" [ngClass]="idDriver === driver.uid ? 'driver_selected' : null">
+        <ion-item lines="none" style="cursor: pointer;" (click)="driverSel(driver)">
+            <ion-avatar>
+                <img [src]="driver.photoURL" />
+            </ion-avatar>
+            <ion-label>
+                <h2>{{driver.name}}</h2>
+                <h6 class="medium">{{driver.phoneNumber}}</h6>
+            </ion-label>
+        </ion-item>
+    </ion-col>
+</ion-row>

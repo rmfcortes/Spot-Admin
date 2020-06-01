@@ -1,0 +1,19 @@
+.pointer {
+    cursor: pointer;
+}
+
+.pointer:hover {
+    color: var(--ion-color-contrast);
+    --color: var(--ion-color-contrast);
+    background: var(--ion-color-primary-tint);
+    opacity: 0.75;
+}
+
+.pointer-item {
+    cursor: pointer;
+}
+
+.pointer-item:hover {
+    color: var(--ion-color-primary);
+    --color: var(--ion-color-primary);
+}

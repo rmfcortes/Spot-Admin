@@ -1,0 +1,56 @@
+<ion-header class="ion-no-border">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="salir(null)">
+                <ion-icon slot="start" name="arrow-back" color="primary"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-buttons slot="end" *ngIf="repartidor.preview.id">
+            <ion-button (click)="eliminarRepartidor()">
+                Eliminar
+                <ion-icon slot="start" name="trash"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ng-container>
+        <div style="width: 100%; text-align: center;">
+            <img [src]="repartidor.preview.foto || noPhoto" style="height: 10rem; cursor: pointer;" (click)="photo.click()" /> <br>
+            <input style="display: none" (change)="cropImage($event, 1/.75, true)" type="file" #photo> <br>
+        </div>
+    </ng-container>
+
+    <ion-card style="padding: 1.5rem;">
+        <form #form="ngForm" (submit)="guardar()">
+            <ion-item>
+                <ion-label color="medium" position="floating">Nombre</ion-label>
+                <ion-input (keyup.enter)="$event.target.blur();" [(ngModel)]="repartidor.preview.nombre" type="text" name="name" required minlength="3"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label color="medium" position="floating">Teléfono</ion-label>
+                <ion-input (keyup.enter)="$event.target.blur();" [(ngModel)]="repartidor.preview.telefono" type="tel" name="price" required minlength="10"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label color="medium" position="floating">Usuario</ion-label>
+                <ion-input (keyup.enter)="$event.target.blur();" [(ngModel)]="repartidor.detalles.user" type="text" name="code" minlength="3"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label color="medium" position="floating">Contraseña</ion-label>
+                <ion-input (keyup.enter)="$event.target.blur();" [(ngModel)]="repartidor.detalles.pass" type="text" name="description" minlength="6" placeholder="Mínimo 6 caracteres"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label color="medium">Vehículo</ion-label>
+                <ion-select [(ngModel)]="repartidor.detalles.vehiculo" color="medium" okText="Aceptar" cancelText="Cancelar" required name="section">
+                    <ion-select-option [value]="'bici'">Bicicleta</ion-select-option>
+                    <ion-select-option [value]="'moto'">Motocicleta</ion-select-option>
+                </ion-select>
+            </ion-item>
+            <ion-button class="btn-save" style="margin-top: 2rem" expand="block" type="submit" shape="round">
+                Guardar
+            </ion-button>
+        </form>
+    </ion-card>
+
+</ion-content>

@@ -1,0 +1,16 @@
+.region-item {
+    cursor: pointer;
+    --detail-icon-color: white;
+}
+
+.label-region:hover {
+    color: var(--ion-color-primary);
+    --color: var(--ion-color-primary);
+}
+
+.card-pendientes {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    z-index: 20;
+}

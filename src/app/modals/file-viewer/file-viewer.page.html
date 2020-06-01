@@ -1,0 +1,14 @@
+<ion-header>
+    <ion-toolbar style="--background: #2D3E4F">
+        <ion-buttons slot="start">
+            <ion-button (click)="regresar()" color="light">
+                Cerrar
+                <ion-icon slot="start" name="close"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <iframe [src]="archivo" class="iframe"></iframe>
+</ion-content>

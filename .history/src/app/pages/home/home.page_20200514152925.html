@@ -1,0 +1,91 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Servicios activos</ion-title>
+    </ion-toolbar>
+    <ion-toolbar color="primary" class="mobile">
+        <ion-segment value="'mapa'">
+            <ion-segment-button value="'lista'">
+                <ion-label>Lista</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="'mapa'">
+                <ion-label>Mapa</ion-label>
+            </ion-segment-button>
+        </ion-segment>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-card class="background-gris card-pendientes" *ngIf="map">
+        <ion-item *ngFor="let item of regiones; let i = index" class="region-item" detail (click)="setCentro(i)">
+            <ion-label color="light" class="label-region">{{item.referencia | titlecase}}</ion-label>
+        </ion-item>
+        <ion-item class="region-item" (click)="nueva_region = true">
+            <ion-label color="light" class="label-region">Nueva zona +</ion-label>
+        </ion-item>
+    </ion-card>
+    <ion-card *ngIf="nueva_region" class="background-gris card-pendientes">
+        <ion-item (click)="nuevaZona()">
+            <ion-label color="light">Ciudad: </ion-label>
+            <ion-input type="text"></ion-input>
+        </ion-item>
+        <ion-item class="region-item" (click)="nuevaZona()">
+            <ion-label color="light" class="label-region">Referencia: </ion-label>
+            <ion-input type="text"></ion-input>
+        </ion-item>
+        <div class="boton-nueva-zona">
+
+        </div>
+    </ion-card>
+    <ion-card class="background-gris card-pendientes" *ngIf="map">
+        <ion-item lines="none" *ngFor="let item of pedidos" detail (click)="getRepartidores(item.region)">
+            <ion-label color="light">{{item.region}}: {{item.pedidos.length}} pedidos s/repartidor</ion-label>
+        </ion-item>
+    </ion-card>
+    <div style="overflow-y: hidden; height: 93vh;">
+        <agm-map style="height: 100vh;" [latitude]="centro.lat" [longitude]="centro.lng" [disableDefaultUI]="true" [streetViewControl]="false" [zoomControl]="false" [fitBounds]="true" fitBoundsPadding="bottom: 10; left: 10; right: 10; top: 10" (mapReady)="onMapReady($event)">
+            <!-- repartidores markers -->
+            <agm-marker *ngFor="let item of repartidores; let i = index; trackBy:trackByRepartidor" [agmFitBounds]="true" (markerClick)="verInfoRepartidor(i, item.id)" [iconUrl]='{"url": icon_repartidor,"scaledSize": {"height": 40, "width": 30}}' [latitude]="item.lat"
+                [longitude]="item.lng" [animation]="'DROP'">
+                <agm-info-window [disableAutoPan]="true" [isOpen]="isInfoWindowOpen(i)">
+                    <ion-item *ngIf="repartidor" lines="none">
+                        <ion-avatar style="margin-right: 1rem;">
+                            <img [src]="repartidor.foto" />
+                        </ion-avatar>
+                        <ion-label>
+                            <h3 class="primario" style="font-style: bold;">Nombre: {{repartidor.nombre}}</h3>
+                            <h4>Teléfono: {{repartidor.telefono}}</h4>
+                        </ion-label>
+                    </ion-item>
+                </agm-info-window>
+            </agm-marker>
+            <!-- Servicios markers -->
+            <div *ngFor="let pendientes of pedidos; trackBy:trackByPendiente">
+                <agm-marker *ngFor="let item of pendientes.pedidos; let i = index; trackBy:trackByPedido" [agmFitBounds]="true" (markerClick)="verInfoPedido(i, item)" [iconUrl]='{"url": icon_cliente,"scaledSize": {"height": 40, "width": 30}}' [latitude]="item.negocio.direccion.lat"
+                    [longitude]="item.negocio.direccion.lng" [animation]="'DROP'">
+                    <agm-info-window [disableAutoPan]="true" [isOpen]="isInfoWindowPedido(i)">
+                        <ion-item *ngIf="pedido" lines="none">
+                            <ion-avatar style="margin-right: 1rem;">
+                                <img [src]="pedido.negocio.logo" />
+                            </ion-avatar>
+                            <ion-label>
+                                <h3 class="primario" style="font-style: bold;">Nombre: {{pedido.negocio.nombreNegocio}}</h3>
+                                <h4>Teléfono: {{pedido.negocio.telefono}}</h4>
+                                <h4>Solicitado: {{pedido.createdAt | date:'h:mm a'}}</h4>
+                            </ion-label>
+                        </ion-item>
+                        <ion-button (click)="asignarViaje()" shape="round">
+                            Asignar viaje
+                        </ion-button>
+                    </agm-info-window>
+                </agm-marker>
+            </div>
+            <!-- Zona de cobertura -->
+            <div *ngIf="regiones.length > 0">
+                <agm-polygon *ngFor="let region of regiones; trackBy:trackByRegion" [fillColor]="'#a9bd1c'" [strokeColor]="'#9FB603'" [paths]="region.ubicacion"></agm-polygon>
+            </div>
+        </agm-map>
+    </div>
+</ion-content>

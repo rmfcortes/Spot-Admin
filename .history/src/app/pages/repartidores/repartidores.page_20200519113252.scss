@@ -1,0 +1,12 @@
+.pointer {
+    cursor: pointer;
+}
+
+.pointer:hover {
+    color: var(--ion-color-primary);
+    --color: var(--ion-color-primary);
+}
+
+.pointer-item {
+    cursor: pointer;
+}

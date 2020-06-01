@@ -1,0 +1,25 @@
+.region-item {
+    cursor: pointer;
+    --detail-icon-color: white;
+}
+
+.label-region:hover {
+    color: var(--ion-color-primary);
+    --color: var(--ion-color-primary);
+}
+
+.card-pendientes {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    z-index: 20;
+}
+
+.card-pendientes .boton-nueva-zona {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: var(--ion-color-primary);
+    position: absolute;
+    left: 0;
+}

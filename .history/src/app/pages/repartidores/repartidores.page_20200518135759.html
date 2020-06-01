@@ -1,0 +1,68 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-title>Repartidores</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-grid fixed>
+        <ion-row>
+            <ion-col size="8" class="separate-scroll">
+                <!-- Nuevo repartidor -->
+                <ion-card>
+                    <ion-item detail lines="none" class="pointer">
+                        <ion-label color="medium">Nuevo repartidor</ion-label>
+                    </ion-item>
+                </ion-card>
+
+                <!-- Repartidores suspendidos -->
+                <ion-card *ngIf="suspendidos.length > 0">
+                    <app-repartidores-list [titulo]="'Suspendidos'" [repartidores]="suspendidos" (repartidorSel)="verRepartidor($event)"></app-repartidores-list>
+                </ion-card>
+                <!-- Repartidores asociados -->
+                <ion-card *ngIf="repartidores.length > 0">
+                    <app-repartidores-list [titulo]="'Activos'" [repartidores]="repartidores" (repartidorSel)="verRepartidor($event)"></app-repartidores-list>
+                </ion-card>
+                <!-- Ver más button -->
+                <ion-button *ngIf="!noMore && repartidores.length > 0" (click)="loadMoreRepartidores()" expand="block" shape="round">
+                    Ver más
+                </ion-button>
+            </ion-col>
+            <!-- Detalles taxista seleccionado -->
+            <ion-col size="4">
+                <div *ngIf="repartidor">
+                    <div class="avatar">
+                        <ion-img [src]="repartidor.preview.foto"></ion-img>
+                    </div>
+                    <ion-item style="text-align: center">
+                        <ion-label>
+                            <h1 class="primario">{{repartidor.preview.nombre}}</h1>
+                            <h2 class="medium">{{repartidor.preview.telefono}}</h2>
+                        </ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>
+                            <h2>User:
+                                <ion-text color="medium">{{repartidor.detalles.user}}</ion-text>
+                            </h2>
+                            <h2>Contraseña:
+                                <ion-text color="medium">{{repartidor.detalles.pass}}</ion-text>
+                            </h2>
+                            <h2>Vehículo:
+                                <ion-text color="medium">{{repartidor.detalles.vehiculo}}</ion-text>
+                            </h2>
+                        </ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Habilitado</ion-label>
+                        <ion-toggle color="primary" [(ngModel)]="repartidor.detalles.habilitado" (ionChange)="setHabilitado($event.detail.checked)"></ion-toggle>
+                    </ion-item>
+                    <ion-button (click)="verArchivo(repartidor.detalles.licencia)" style="margin-top: 1rem;" expand="block" fill="outline" color="primary" shape="round" *ngIf="repartidor.detalles.licencia">
+                        Licencia
+                    </ion-button>
+                </div>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+</ion-content>
