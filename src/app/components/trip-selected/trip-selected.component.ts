@@ -23,7 +23,6 @@ export class TripSelectedComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.pedido_selected)
   }
 
 }

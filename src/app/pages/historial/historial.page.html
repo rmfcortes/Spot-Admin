@@ -1,9 +1,194 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>historial</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title>Historial</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col size="8" class="separate-scroll">
+        <!-- Selector de region -->
+        <app-region-selector (region_selected)="getFirstDate($event)"></app-region-selector>
+        
+        <!-- Selector rango fechas -->
+        <ion-row *ngIf="region">
+          <ion-col size="6">
+              <ion-card class="background-gris">
+                  <ion-item lines="none" style="cursor: pointer;">
+                      <ion-label color="light">Fecha inicial</ion-label>
+                      <ion-datetime style="color: #a9bd1c" (ionChange)="initialDateCambio($event.detail.value)" [min]="first_date" [max]="today" displayFormat="D-MMM-YYYY" doneText="Aceptar" cancelText="Cancelar"></ion-datetime>
+                  </ion-item>
+              </ion-card>
+          </ion-col>
+          <ion-col size="6">
+              <ion-card class="background-gris">
+                  <ion-item lines="none" style="cursor: pointer;">
+                      <ion-label color="light">Fecha final</ion-label>
+                      <ion-datetime style="color: #a9bd1c" (ionChange)="endDateCambio($event.detail.value)" [min]="first_date" [max]="today" displayFormat="D-MMM-YYYY" doneText="Aceptar" cancelText="Cancelar"></ion-datetime>
+                  </ion-item>
+              </ion-card>
+          </ion-col>
+        </ion-row>
+
+        <!-- Selector repartidor -->
+
+        <ion-row *ngIf="inicial_date && end_date">
+          <ion-col size="6">
+              <ion-card *ngIf="pedidos.length > 0" class="background-gris">
+                  <ion-item lines="none">
+                      <ion-icon slot="start" name="funnel" color="light"></ion-icon>
+                      <ion-label color="light">{{repartidor_selected ? repartidor_selected.nombre : 'Filtrar por repartidor'}}</ion-label>
+                      <ion-icon slot="end" name="chevron-down" color="light" *ngIf="!repartidores_ready" (click)="getRepartidoresNames()" style="cursor: pointer;"></ion-icon>
+                      <ion-icon slot="end" name="chevron-up" color="light" *ngIf="repartidores_ready" (click)="repartidores_ready = false" style="cursor: pointer;"></ion-icon>
+                  </ion-item>
+                  <div *ngIf="repartidores_ready">
+                      <ion-item *ngFor="let repartidor of repartidores" detail style="--detail-icon-color: white; cursor: pointer" (click)="filterPedidosByRepartidor(repartidor)">
+                          <ion-label color="light">{{repartidor.nombre | titlecase}}</ion-label>
+                      </ion-item>
+                      <ion-item detail style="--detail-icon-color: white; cursor: pointer" (click)="verTodos()">
+                          <ion-label color="light">Ver todos</ion-label>
+                      </ion-item>
+                  </div>
+              </ion-card>
+          </ion-col>          
+          <ion-col size="6">
+              <ion-card *ngIf="pedidos.length > 0" class="background-gris">
+                  <ion-item lines="none">
+                      <ion-icon slot="start" name="funnel" color="light"></ion-icon>
+                      <ion-label color="light">{{negocio_selected ? negocio_selected.nombre : 'Filtrar por negocio'}}</ion-label>
+                      <ion-icon slot="end" name="chevron-down" color="light" *ngIf="!negocios_ready" (click)="getNegociosNames()" style="cursor: pointer;"></ion-icon>
+                      <ion-icon slot="end" name="chevron-up" color="light" *ngIf="negocios_ready" (click)="negocios_ready = false" style="cursor: pointer;"></ion-icon>
+                  </ion-item>
+                  <div *ngIf="negocios_ready">
+                      <ion-item *ngFor="let negocio of negocios" detail style="--detail-icon-color: white; cursor: pointer" (click)="filterPedidosByNegocio(negocio)">
+                          <ion-label color="light">{{negocio.nombre | titlecase}}</ion-label>
+                      </ion-item>
+                      <ion-item detail style="--detail-icon-color: white; cursor: pointer" (click)="verTodos()">
+                          <ion-label color="light">Ver todos</ion-label>
+                      </ion-item>
+                  </div>
+              </ion-card>
+          </ion-col>
+        </ion-row>
+
+          <!-- Loading spinner -->
+        <ion-item lines="none" *ngIf="loading_pedidos">
+          <ion-spinner name="dots" style="margin:auto"></ion-spinner>
+        </ion-item>
+
+        <!-- Sin servicios label -->
+        <ion-item lines="none" style="text-align: center" *ngIf="no_registros">
+          <ion-label color="medium">{{no_registros}}</ion-label>
+        </ion-item>
+
+        <!-- Pedidos -->
+        <div *ngIf="filtered_pedidos.length === 0">
+          <ion-list *ngFor="let historial of pedidos">
+            <ion-list-header>
+              <ion-label color="primary">{{historial.fecha}}</ion-label>
+            </ion-list-header>
+            <ion-item>
+              <ion-label>Creado</ion-label>
+              <ion-label>Total</ion-label>
+              <ion-label>Pago</ion-label>
+              <ion-label>Negocio</ion-label>
+              <ion-label>Repartidor</ion-label>
+              <ion-label>Entregado</ion-label>
+            </ion-item>          
+            <ion-item *ngFor="let ped of historial.pedidos" class="resaltar" (click)="pedido = ped" [ngClass]="ped === pedido ? 'active' : 'initial'">
+              <ion-label color="medium">{{ped.createdAt | date:'shortTime'}}</ion-label>
+              <ion-label color="medium">{{ped.total | currency:'CAD':'symbol-narrow':'1.0-2'}}</ion-label>
+              <ng-container *ngIf="ped.comision; else comisionTemp">
+                <ion-label color="medium">{{ped.formaPago.forma | titlecase}} / {{ped.comision | currency:'CAD':'symbol-narrow':'1.0-2'}}</ion-label>
+              </ng-container>
+              <ng-template #comisionTemp>
+                <ion-label color="medium">{{ped.formaPago.forma | titlecase}}</ion-label>
+              </ng-template>
+              <ion-label color="medium">{{ped.negocio.nombreNegocio}}</ion-label>
+              <ng-container *ngIf="ped.repartidor; else repartidorTemp">
+                <ng-container *ngIf="ped.repartidor.ganancia; else gananciaTemp">
+                  <ion-label color="medium">{{ped.repartidor.nombre}} - {{ped.repartidor.ganancia | currency:'CAD':'symbol-narrow':'1.0-2'}}</ion-label>
+                </ng-container>
+                <ng-template #gananciaTemp>
+                  <ion-label color="medium">{{ped.repartidor.nombre}}</ion-label>
+                </ng-template>
+              </ng-container>
+              <ng-template #repartidorTemp>
+                <ion-label color="medium">--</ion-label>
+              </ng-template>
+              <ion-label color="medium">{{ped.entregado ? (ped.entregado | date:'shortTime') : '--'}}</ion-label>
+            </ion-item>
+          </ion-list>        
+        </div>
+        
+              <!-- Pedidos filtrado-->
+          <!-- Resumen repartidor -->
+        <ion-card *ngIf="repartidor_selected">
+          <ion-item>
+            <ion-label>Completados: {{completados}}</ion-label>
+          </ion-item>
+          <ion-item *ngIf="ganancia_repartidor">
+            <ion-label>Ganancia:{{ganancia_repartidor | currency: 'CAD' : 'symbol-narrow' : '1.0-2'}}</ion-label>
+          </ion-item>
+        </ion-card>
+
+          <!-- Resumen Negocio -->
+          <ion-card *ngIf="negocio_selected">
+            <ion-item>
+              <ion-label>Completados: {{completados}}</ion-label>
+            </ion-item>
+            <ion-item *ngIf="saldo_negocio">
+              <ion-label>Saldo total: {{saldo_negocio | currency: 'CAD' : 'symbol-narrow' : '1.0-2'}}</ion-label>
+            </ion-item>             
+            <ion-item *ngIf="saldo_negocio">
+              <ion-label>Saldo pendiente: {{saldo_pendiente - comisiones | currency: 'CAD' : 'symbol-narrow' : '1.0-2'}}</ion-label>
+            </ion-item>            
+            <ion-item>
+              <ion-label>Comisiones:{{comisiones | currency: 'CAD' : 'symbol-narrow' : '1.0-2'}}</ion-label>
+            </ion-item>
+          </ion-card>
+
+        <ion-list *ngFor="let historial of filtered_pedidos">
+          <ion-list-header>
+            <ion-label color="primary">{{historial.fecha}}</ion-label>
+          </ion-list-header>
+          <ion-item>
+            <ion-label>Creado</ion-label>
+            <ion-label>Total</ion-label>
+            <ion-label>Pago</ion-label>
+            <ion-label>Comision</ion-label>
+            <ion-label>Negocio</ion-label>
+            <ion-label>Repartidor</ion-label>
+            <ion-label>Entregado</ion-label>
+          </ion-item>          
+          <ion-item *ngFor="let ped of historial.pedidos" class="resaltar" (click)="pedido = ped" [ngClass]="ped === pedido ? 'active' : 'initial'">
+            <ion-label color="medium">{{ped.createdAt | date:'shortTime'}}</ion-label>
+            <ion-label color="medium">{{ped.total | currency:'CAD':'symbol-narrow':'1.0-2'}}</ion-label>
+            <ion-label color="medium">{{ped.formaPago.forma | titlecase}}</ion-label>
+            <ion-label color="medium">{{ped.comision ? ped.comision : '--'}}</ion-label>
+            <ion-label color="medium">{{ped.negocio.nombreNegocio}}</ion-label>
+            <ion-label color="medium">{{ped.repartidor ? ped.repartidor.nombre : '--'}}</ion-label>
+            <ion-label color="medium">{{ped.entregado ? (ped.entregado | date:'shortTime') : '--'}}</ion-label>
+          </ion-item>
+        </ion-list>
+
+      </ion-col>
+
+
+        <!-- Detalles pedido -->
+      <ion-col size="4" class="separate-scroll" *ngIf="pedido">
+         <!-- Mapa -->
+        <agm-map style="height: 25vh;" [latitude]="centro.lat" [longitude]="centro.lng" [disableDefaultUI]="true" [streetViewControl]="false" [zoomControl]="false" [fitBounds]="true" maxZoom="17" [fitBoundsPadding]="20">
+          <agm-marker [agmFitBounds]="true" [iconUrl]='{"url": icon_origen,"scaledSize": {"height": 40, "width": 30}}' [latitude]="pedido.negocio.direccion.lat" [longitude]="pedido.negocio.direccion.lng" [animation]="'DROP'">
+          </agm-marker>
+          <agm-marker [agmFitBounds]="true" [iconUrl]='{"url": icon_destino,"scaledSize": {"height": 40, "width": 30}}' [latitude]="pedido.cliente.direccion.lat" [longitude]="pedido.cliente.direccion.lng" [animation]="'DROP'">
+          </agm-marker>
+        </agm-map>
+        <!-- Detalles -->
+        <app-trip-selected [pedido_selected]="pedido"></app-trip-selected>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
 </ion-content>

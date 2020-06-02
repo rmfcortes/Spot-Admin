@@ -1,6 +1,7 @@
 export interface Pedido {
     cliente: Cliente;
     createdAt: number;
+    comision: number;
     id: string;
     formaPago: FormaPago;
     productos: Producto[];
@@ -13,6 +14,15 @@ export interface Pedido {
     repartidor?: Repartidor;
     pendiente_repartidor: boolean;
     entregado?: number;
+}
+
+export interface HistorialPedido {
+    fecha: string
+    pedidos: Pedido[];
+    completados: Pedido[];
+    cancelados_user: Pedido[];
+    cancelados_driver: Pedido[];
+    ver_detalles: boolean;
 }
 
 export interface PedidoPendiente {
@@ -28,6 +38,16 @@ export interface Negocio {
     logo: string;
     nombreNegocio: string;
     telefono: string;
+}
+
+export interface Repartidor {
+    nombre: string;
+    telefono: string;
+    foto: string;
+    lat: number;
+    lng: number;
+    id: string;
+    ganancia: number;
 }
 
 
@@ -76,13 +96,4 @@ export interface Complemento {
     precio: number;
     isChecked?: boolean;
     deshabilitado?: boolean;
-}
-
-export interface Repartidor {
-    nombre: string;
-    telefono: string;
-    foto: string;
-    lat: number;
-    lng: number;
-    id: string;
 }

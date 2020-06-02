@@ -1,11 +1,3 @@
-<!-- Mapa -->
-<agm-map style="height: 25vh;" [latitude]="centro.lat" [longitude]="centro.lng" [disableDefaultUI]="true" [streetViewControl]="false" [zoomControl]="false" [fitBounds]="true" maxZoom="17" [fitBoundsPadding]="10">
-    <agm-marker [agmFitBounds]="true" [iconUrl]='{"url": icon_origen,"scaledSize": {"height": 40, "width": 30}}' [latitude]="pedido_selected.negocio.direccion.lat" [longitude]="pedido_selected.negocio.direccion.lng" [animation]="'DROP'">
-    </agm-marker>
-    <agm-marker [agmFitBounds]="true" [iconUrl]='{"url": icon_destino,"scaledSize": {"height": 40, "width": 30}}' [latitude]="pedido_selected.cliente.direccion.lat" [longitude]="pedido_selected.cliente.direccion.lng" [animation]="'DROP'">
-    </agm-marker>
-</agm-map>
-
 <!-- Detalles -->
 <ion-item-divider style="text-align: center;">
     <ion-label color="primary" style="font-size: x-large;">Detalles</ion-label>
@@ -23,6 +15,9 @@
         </h2>
         <h2 *ngIf="pedido_selected.entregado">Total:
             <ion-text color="medium">{{pedido_selected.total | currency:'CAD':'symbol-narrow':'1.0-2'}}</ion-text>
+        </h2>        
+        <h2 *ngIf="pedido_selected.entregado">Comisión:
+            <ion-text color="medium" *ngIf="pedido_selected.comision">{{pedido_selected.comision | currency:'CAD':'symbol-narrow':'1.0-2'}}</ion-text>
         </h2>
     </ion-label>
 </ion-item>
