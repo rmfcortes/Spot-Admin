@@ -11,9 +11,9 @@ import { Mensaje } from 'src/app/interface/chat.interface';
 
 export class BubblesComponent implements OnInit {
 
-  @Input() msg: Mensaje;
-  @Input() last: boolean;
-  @Input() status: string;
+  @Input() msg: Mensaje
+  @Input() last: boolean
+  @Input() status: string
 
   constructor() { }
 

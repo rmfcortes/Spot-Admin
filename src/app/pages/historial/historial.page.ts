@@ -68,6 +68,13 @@ export class HistorialPage implements OnInit {
 
   async getFirstDate(region: string) {
     this.region = region
+    this.pedidos = []
+    this.pedido = null
+    this.filtered_pedidos = []
+    this.inicial_date = null
+    this.end_date = null
+    this.range_change_negocios = true
+    this.range_change_repartidores = true
     this.first_date = localStorage.getItem('first_date')
     if (!this.first_date) this.first_date = await this.historialService.getFirstDate(region)
     if (!this.first_date) this.first_date = await this.historialService.setFirstDate()

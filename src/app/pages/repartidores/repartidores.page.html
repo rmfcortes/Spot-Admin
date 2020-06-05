@@ -9,26 +9,7 @@
         <ion-row>
             <ion-col size="8" class="separate-scroll">
                 <!-- Seleccionar región -->
-                <ion-card>
-                    <ng-container *ngIf="verRegiones; else regionesTemp">
-                        <ion-item (click)="verRegiones = false" style="background-color: var(--ion-color-primary); cursor: pointer;">
-                            <ion-label color="light">Regiones</ion-label>
-                            <ion-icon color="light" slot="end" name="chevron-up"></ion-icon>
-                        </ion-item>
-                    </ng-container>
-                    <ng-template #regionesTemp>
-                        <ion-item (click)="verRegiones = true" class="pointer">
-                            <ion-label color="medium" class="pointer">Regiones</ion-label>
-                            <ion-icon color="medium" slot="end" name="chevron-down"></ion-icon>
-                        </ion-item>
-                    </ng-template>
-                    <!-- Lista de regiones -->
-                    <div *ngIf="verRegiones">
-                        <ion-item *ngFor="let item of regiones" (click)="setRegion(item)">
-                            <ion-label class="pointer">{{item | titlecase}}</ion-label>
-                        </ion-item>
-                    </div>
-                </ion-card>
+                <app-region-selector (region_selected)="setRegion($event)"></app-region-selector>
 
                 <!-- Nuevo repartidor -->
                 <ion-card (click)="editRepartidor(null)" *ngIf="region">
@@ -50,11 +31,11 @@
 
                 <!-- Repartidores suspendidos -->
                 <ion-card *ngIf="suspendidos.length > 0">
-                    <app-repartidores-list [titulo]="'Suspendidos'" [repartidores]="suspendidos" (repartidorSel)="verRepartidor($event)"></app-repartidores-list>
+                    <app-repartidores-list [titulo]="'Suspendidos'" [repartidores]="suspendidos" [other_sel]="!suspendidoSel" (repartidor_selected)="verRepartidor($event, true)"></app-repartidores-list>
                 </ion-card>
                 <!-- Repartidores asociados -->
                 <ion-card *ngIf="repartidores.length > 0">
-                    <app-repartidores-list [titulo]="'Activos'" [repartidores]="repartidores" (repartidorSel)="verRepartidor($event)"></app-repartidores-list>
+                    <app-repartidores-list [titulo]="'Activos'" [repartidores]="repartidores" [other_sel]="suspendidoSel" (repartidor_selected)="verRepartidor($event, false)"></app-repartidores-list>
                 </ion-card>
                 <!-- Ver más button -->
                 <ion-button *ngIf="!noMore && repartidores.length > 0" (click)="loadMoreRepartidores()" expand="block" shape="round">

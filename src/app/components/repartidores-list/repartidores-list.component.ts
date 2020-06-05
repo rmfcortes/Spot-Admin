@@ -11,6 +11,7 @@ import { RepartidorPreview } from 'src/app/interface/repartidor.interface';
 export class repartidoresListComponent implements OnInit {
 
   @Input() titulo: string
+  @Input() other_sel: boolean
   @Input() repartidores: RepartidorPreview[]
   @Output() repartidor_selected = new EventEmitter<RepartidorPreview>()
 

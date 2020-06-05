@@ -27,15 +27,17 @@ export class HistorialService {
     return new Promise((resolve, reject) => {
       const dateSub = this.db.object('historial/por_fecha').valueChanges().subscribe(historial => {
         dateSub.unsubscribe()
-        const fechas = Object.entries(historial)
-        if (fechas.length > 0) {
-          const first_date = fechas[0][0]
-          this.db.object('first_date').set(first_date)
-          localStorage.setItem('first_date', first_date)
-          resolve(first_date)
-        } else {
-          resolve(null)
-        }
+        if (historial) {
+          const fechas = Object.entries(historial)
+          if (fechas.length > 0) {
+            const first_date = fechas[0][0]
+            this.db.object('first_date').set(first_date)
+            localStorage.setItem('first_date', first_date)
+            resolve(first_date)
+          } else {
+            resolve(null)
+          }
+        } else resolve(null)
       })
     });
   }

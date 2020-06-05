@@ -1,9 +1,31 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>chat</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title>Chat</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-progress-bar *ngIf="loading_unreads" type="indeterminate"></ion-progress-bar>
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col size="4" class="separate-scroll">
+        <ion-item detail [ngClass]="item.idUser === user_anterior ? 'shadow' : 'resaltar'" *ngFor="let item of unreads; trackBy: trackUnread" (click)="verMensajes(item.idUser)">
+          <ion-avatar>
+            <img [src]="item.foto || avatar" />
+          </ion-avatar>
+          <ion-label>{{item.nombre | titlecase}}</ion-label>
+          <ion-badge color="primary" *ngIf="item.cantidad">{{item.cantidad}}</ion-badge>
+        </ion-item>
+      </ion-col>
+      <ion-col size="8" class="separate-scroll-mensajes" style="background: cornsilk" *ngIf="user_anterior" id="cuadro_mensajes">
+        <div *ngFor="let item of mensajes; let last = last; trackBy: trackByMensaje">
+          <app-bubbles [msg]="item" [last]="last" [status]="status"></app-bubbles>
+        </div>
+        <ion-item lines="none" class="pie">
+          <textarea (keyup.enter)="$event.target.blur()" placeholder="Escribe tu mensaje aquí" autosize class="message-input" maxRows="4" [(ngModel)]="newMsg"></textarea>
+          <ion-icon color="primary" name="send" slot="end" (click)="sendMessage()" style="cursor: pointer;"></ion-icon>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

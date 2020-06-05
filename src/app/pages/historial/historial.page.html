@@ -12,7 +12,7 @@
         <app-region-selector (region_selected)="getFirstDate($event)"></app-region-selector>
         
         <!-- Selector rango fechas -->
-        <ion-row *ngIf="region">
+        <ion-row *ngIf="region && first_date">
           <ion-col size="6">
               <ion-card class="background-gris">
                   <ion-item lines="none" style="cursor: pointer;">

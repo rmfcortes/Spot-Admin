@@ -12,7 +12,7 @@
               <app-region-selector (region_selected)="setRegion($event)"></app-region-selector>
 
               <!-- Categoria selector -->
-              <ion-card *ngIf="region">
+              <ion-card *ngIf="region && categorias.length > 0">
                   <ng-container *ngIf="verCategorias; else catTemp">
                       <ion-item (click)="verCategorias = false" style="background-color: var(--ion-color-primary); cursor: pointer;">
                           <ion-label color="light">Categorias</ion-label>
@@ -41,7 +41,7 @@
 
               <!-- No hay negocios -->
               <ion-item lines="none" style="text-align: center;" *ngIf="region && categoria && negocios.length === 0 && negocios_unauthorized.length === 0">
-                  <ion-label color="medium">No hay negocios registrados en esta categoria</ion-label>
+                  <ion-label color="medium" class="ion-text-wrap">No hay negocios registrados en esta categoria</ion-label>
               </ion-item>
 
               <!-- Spinner -->
@@ -80,8 +80,8 @@
           <!-- Negocio Detalles -->
           <ion-col size="7">
               <!-- Mapa -->
-              <agm-map style="height: 25vh;" [latitude]="centro.lat" [longitude]="centro.lng" [disableDefaultUI]="true" [streetViewControl]="false" [zoomControl]="false" [fitBounds]="true" [maxZoom]="17" [fitBoundsPadding]="10">
-                  <agm-marker *ngIf="negocio_perfil" [agmFitBounds]="true" [iconUrl]='{"url": icon_origen,"scaledSize": {"height": 40, "width": 30}}' [latitude]="negocio_perfil.direccion.lat" [longitude]="negocio_perfil.direccion.lng" [animation]="'DROP'">
+              <agm-map *ngIf="negocio_perfil" style="height: 25vh;" [latitude]="centro.lat" [longitude]="centro.lng" [disableDefaultUI]="true" [streetViewControl]="false" [zoomControl]="false" [fitBounds]="true" [maxZoom]="17" [fitBoundsPadding]="10">
+                  <agm-marker [agmFitBounds]="true" [iconUrl]='{"url": icon_origen,"scaledSize": {"height": 40, "width": 30}}' [latitude]="negocio_perfil.direccion.lat" [longitude]="negocio_perfil.direccion.lng" [animation]="'DROP'">
                   </agm-marker>
               </agm-map>
               <ion-card *ngIf="negocio_perfil">

@@ -54,10 +54,12 @@ export class RepartidoresService {
     })
   }
 
-  getRepartidorDetalles(idRepartidor: string, region: string): Promise<RepartidorDetalles> {
+  getRepartidorDetalles(idRepartidor: string, region: string, suspendido: boolean): Promise<RepartidorDetalles> {
     return new Promise((resolve, reject) => {
-      const repSub = this.db.object(`repartidores_asociados_info/${region}/detalles/${idRepartidor}`)
-      .valueChanges().subscribe((repartidor: RepartidorDetalles) => {
+      let ref: string
+      if (suspendido) ref = `repartidores_asociados_info/${region}/suspendidos/detalles/${idRepartidor}`
+      else ref = `repartidores_asociados_info/${region}/detalles/${idRepartidor}`
+      const repSub = this.db.object(ref).valueChanges().subscribe((repartidor: RepartidorDetalles) => {
         repSub.unsubscribe()
         resolve(repartidor)
       })

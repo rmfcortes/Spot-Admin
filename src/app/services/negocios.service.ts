@@ -24,7 +24,8 @@ export class NegociosService {
     return new Promise((resolve, reject) => {
       const catSub = this.db.object(`categoria/${region}`).valueChanges().subscribe(categorias => {
         catSub.unsubscribe()
-        resolve(Object.keys(categorias))
+        if (categorias) resolve(Object.keys(categorias))
+        else resolve([])
       })
     })
   }
@@ -36,18 +37,22 @@ export class NegociosService {
           data.orderByKey().limitToFirst(batch).startAt(lastKey)).valueChanges()
           .subscribe(data => {
             x.unsubscribe()
-            const negocios = []
-            if (data.length > 1) resolve (negocios.concat(Object.values(data[0])).concat(Object.values(data[1])))
-            else resolve(negocios.concat(Object.values(data[0])))
+            if (data.length > 0) {
+              const negocios = []
+              if (data.length > 1) resolve (negocios.concat(Object.values(data[0])).concat(Object.values(data[1])))
+              else resolve(negocios.concat(Object.values(data[0])))
+            } else resolve([])
           })
       } else {
         const x = this.db.list(`negocios/preview/${region}/${categoria}/todos`, data =>
           data.orderByKey().limitToFirst(batch)).valueChanges()
           .subscribe(data => {
             x.unsubscribe()
-            const negocios = []
-            if (data.length > 1) resolve (negocios.concat(Object.values(data[0])).concat(Object.values(data[1])))
-            else resolve(negocios.concat(Object.values(data[0])))
+            if (data.length > 0) {
+              const negocios = []
+              if (data.length > 1) resolve (negocios.concat(Object.values(data[0])).concat(Object.values(data[1])))
+              else resolve(negocios.concat(Object.values(data[0])))
+            } else resolve([])
           })
       }
     })

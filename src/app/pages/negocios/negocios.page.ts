@@ -50,8 +50,11 @@ export class NegociosPage implements OnInit {
 
   async setRegion(region: string) {
     if (this.region === region) return
+    this.negocios = []
+    this.negocio_perfil = null
     this.region = region
     this.categorias = []
+    this.categoria = ''
     this.getCategorias()
     this.negocios_unauthorized = await this.negocioService.getSuspendidos(this.region)
 
@@ -74,15 +77,20 @@ export class NegociosPage implements OnInit {
   getNegocios() {
     this.negocioService.getNegocios(this.region, this.categoria, this.batch + 1, this.lastKey)
     .then(negocios => {
-      if (negocios.length === this.batch + 1) {
-        this.lastKey = negocios[negocios.length - 1].id
-        negocios.pop()
+      if (negocios) {
+        if (negocios.length === this.batch + 1) {
+          this.lastKey = negocios[negocios.length - 1].id
+          negocios.pop()
+        } else {
+          this.noMore = true
+        }
+        this.negocios = this.negocios.concat(negocios)
+        this.cargando_negocios = false
+        this.verCategorias = false
       } else {
         this.noMore = true
+        this.cargando_negocios = false
       }
-      this.negocios = this.negocios.concat(negocios)
-      this.cargando_negocios = false
-      this.verCategorias = false
     })
   }
 

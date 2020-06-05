@@ -1,23 +1,21 @@
 export interface Mensaje {
-    msg: string;
-    createdAt: number;
-    status: string;
-    isMe: boolean;
+    createdAt: number
+    isMe: boolean
+    msg: string
+    status: string
 }
 
 export interface MensajeCliente {
-    isMe: boolean;
-    createdAt: number;
-    idPedido: string;
-    msg: string;
-    idRepartidor: string;
+    createdAt: number
+    isMe: boolean
+    msg: string
 }
 export interface MensajeAdmin {
-    isMe: boolean;
-    createdAt: number;
-    msg: string;
-    idCliente: string;
-    repartidor: string;
+    createdAt: number
+    isMe: boolean
+    msg: string
+    idCliente: string
+    repartidor: string
 }
 
 export interface MessagePreview {

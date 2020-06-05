@@ -1,0 +1,24 @@
+.pie {
+    position: fixed;
+    bottom: 5px;
+    width: 55%;
+}
+
+.message-input {
+    width: 100%;
+    border: 1px solid var(--ion-color-primary-tint);
+    border-radius: 10px;
+    background: #fff;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.msg-btn {
+    --padding-start: 0.5em;
+    --padding-end: 0.5em;
+}
+
+.separate-scroll-mensajes {
+    height: 83vh;
+    overflow: auto;
+}

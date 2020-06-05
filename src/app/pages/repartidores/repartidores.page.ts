@@ -6,10 +6,9 @@ import { FileViewerPage } from 'src/app/modals/file-viewer/file-viewer.page';
 import { RepartidorPage } from 'src/app/modals/repartidor/repartidor.page';
 
 import { RepartidoresService } from 'src/app/services/repartidores.service';
+import { CommonService } from 'src/app/services/common.service';
 
 import { RepartidorPreview, RepartidorInfo } from 'src/app/interface/repartidor.interface';
-import { CommonService } from 'src/app/services/common.service';
-import { RegionService } from 'src/app/services/region.service';
 
 @Component({
   selector: 'app-repartidores',
@@ -28,6 +27,8 @@ export class RepartidoresPage implements OnInit {
   loadingRepartidores = false
   loadingSuspendidos = false
 
+  suspendidoSel = false
+
   enable_toogle = false
 
   batch = 24
@@ -39,31 +40,11 @@ export class RepartidoresPage implements OnInit {
     private modalCtrl: ModalController,
     private repartidoresService: RepartidoresService,
     private commonService: CommonService,
-    private regionService: RegionService,
   ) { }
 
   // Info inicial
   ngOnInit() {
-    this.getRegiones()
-  }
-
-  ionViewWillEnter() {
     this.menu.enable(true)
-  }
-
-  async getRegiones() {
-    this.regiones = []
-    const regiones = await this.commonService.getRegiones()
-    if (regiones.length === 0) {
-      this.regionService.getRegiones()
-      .then(regiones => {
-        this.commonService.setRegiones(regiones)
-        console.log(regiones)
-        for (const region of regiones) {
-          this.regiones.push(region.referencia)
-        }
-      })
-    }
   }
 
   // Acciones
@@ -112,6 +93,9 @@ export class RepartidoresPage implements OnInit {
     this.region = region
     this.loadingRepartidores = true
     this.loadingSuspendidos = true
+    this.suspendidos = []
+    this.repartidores = []
+    this.repartidor = null
     this.getRepartidores()
     this.getSuspendidos()
     this.verRegiones = false
@@ -120,7 +104,6 @@ export class RepartidoresPage implements OnInit {
   getRepartidores() {
     this.repartidoresService.getRepartidoresPreview(this.region, this.batch + 1, this.lastKey)
     .then(repartidores => {
-      console.log(repartidores)
       this.loadingRepartidores = false
       if (repartidores.length === this.batch + 1) {
         this.lastKey = repartidores[repartidores.length - 1].id
@@ -135,19 +118,21 @@ export class RepartidoresPage implements OnInit {
   getSuspendidos() {
     this.repartidoresService.getSuspendidos(this.region)
     .then(repartidores => {
-      console.log(repartidores)
       this.loadingSuspendidos = false
       this.suspendidos = repartidores
     })
   }
 
-  verRepartidor(preview: RepartidorPreview) {
-    this.repartidoresService.getRepartidorDetalles(preview.id, this.region)
+  verRepartidor(preview: RepartidorPreview, suspendido: boolean) {
+    this.enable_toogle = false
+    this.repartidoresService.getRepartidorDetalles(preview.id, this.region, suspendido)
     .then(detalles => {
       this.repartidor = {
         preview,
         detalles
       }
+      if (suspendido) this.suspendidoSel = true
+      else this.suspendidoSel = false
       setTimeout(() => {
         this.enable_toogle = true
       }, 500);
