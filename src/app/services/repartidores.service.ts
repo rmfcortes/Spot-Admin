@@ -19,7 +19,7 @@ export class RepartidoresService {
   // Home Page
 
   getRepartidoresActivos(region: string) {
-    return this.db.list(`repartidores_asociados_data/${region}`).valueChanges()
+    return this.db.list(`repartidores_asociados_info/${region}/preview`).valueChanges()
   }
 
   getRepartidorInfo(idRepartidor: string, region: string): Promise<RepartidorPreview> {

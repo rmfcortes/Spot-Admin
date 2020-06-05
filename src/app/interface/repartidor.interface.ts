@@ -1,13 +1,18 @@
 export interface RepartidorAsociado {
+    activo: boolean;
+    calificaciones: number;
+    foto: string;
     id: string;
-    last_notification: number;
-    last_pedido: number;
     lat: number;
     lng: number;
+    nombre: string;
+    promedio: string;
+    telefono: string;
+    last_notification: number;
+    last_pedido: number;
     pedidos_activos: number;
     distancia: number;
     token: string;
-    nombre: string;
 }
 
 export interface RepartidorPreview {

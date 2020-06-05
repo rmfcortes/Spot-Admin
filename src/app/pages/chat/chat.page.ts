@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MenuController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
@@ -14,10 +14,11 @@ import { MessagePreview, Mensaje, MensajeAdmin } from '../../interface/chat.inte
   templateUrl: './chat.page.html',
   styleUrls: ['./chat.page.scss'],
 })
-export class ChatPage implements OnInit {
+export class ChatPage implements OnInit, OnDestroy {
 
   avatar = '../../../assets/img/avatar.png'
 
+  unreadSub: Subscription
   loading_unreads = true
   unreads: MessagePreview[] = []
 
@@ -39,8 +40,14 @@ export class ChatPage implements OnInit {
     this.getUnread()
   }
 
+  ngOnDestroy() {
+    if (this.statusSub) this.statusSub.unsubscribe()
+    if (this.unreadSub) this.unreadSub.unsubscribe()
+    if (this.user_anterior) this.chatService.getMensajes(this.user_anterior).off('child_added')
+  }
+
   getUnread() {
-    this.chatService.getUnread().subscribe((unreads: MessagePreview[]) => {
+    this.unreadSub = this.chatService.getUnread().subscribe((unreads: MessagePreview[]) => {
       this.unreads = unreads
       this.loading_unreads = false
     })

@@ -24,7 +24,7 @@
     <div style="overflow-y: hidden; height: 93vh; position: static;">
         <agm-map style="height: 100vh;" [latitude]="centro.lat" [longitude]="centro.lng" [disableDefaultUI]="true" [streetViewControl]="false" [zoomControl]="false" [fitBounds]="true" fitBoundsPadding="bottom: 10; left: 10; right: 10; top: 10" (mapReady)="onMapReady($event)">
             <!-- repartidores markers -->
-            <agm-marker *ngFor="let item of repartidores; let i = index; trackBy:trackByRepartidor" [agmFitBounds]="true" (markerClick)="verInfoRepartidor(i, item.id)" [iconUrl]='{"url": icon_repartidor,"scaledSize": {"height": 40, "width": 30}}' [latitude]="item.lat"
+            <agm-marker *ngFor="let item of repartidores; let i = index; trackBy:trackByRepartidor" [agmFitBounds]="true" (markerClick)="verInfoRepartidor(i, item)" [iconUrl]='{"url": icon_repartidor,"scaledSize": {"height": 40, "width": 30}}' [latitude]="item.lat"
                 [longitude]="item.lng" [animation]="'DROP'">
                 <agm-info-window [disableAutoPan]="true" [isOpen]="isInfoWindowOpen(i)">
                     <ion-item *ngIf="repartidor" lines="none">

@@ -32,7 +32,7 @@ export class HomePage implements OnInit{
   
   repartidores: RepartidorAsociado[]
   radioRepartidores = []
-  repartidor: RepartidorPreview
+  repartidor: RepartidorAsociado
   repSub: Subscription
 
   map: any
@@ -250,12 +250,9 @@ export class HomePage implements OnInit{
     });
   }
 
-  verInfoRepartidor(i: number, idRepartidor: string) {
-    this.repartidoresService.getRepartidorInfo(idRepartidor, this.pedido.region)
-    .then(repartidor => {
-      this.openedWindow = i
-      this.repartidor = repartidor
-    })
+  verInfoRepartidor(i: number, repartidor: RepartidorAsociado) {
+    this.openedWindow = i
+    this.repartidor = repartidor
   }
 
   asignarPedido() {
