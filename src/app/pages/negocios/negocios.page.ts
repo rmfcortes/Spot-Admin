@@ -128,13 +128,13 @@ export class NegociosPage implements OnInit {
       region: this.region,
       contacto: '',
       telefono: '',
-      tipo: '',
+      tipo: 'servicios',
       entrega: '',
       formas_pago: {
         efectivo: false,
         tarjeta: false
       },
-      repartidores_propios: true
+      repartidores_propios: true,
     }
     const modal = await this.modalCtrl.create({
       component: NegocioPage,

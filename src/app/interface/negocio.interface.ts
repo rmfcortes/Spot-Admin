@@ -20,7 +20,6 @@ export interface NegocioPerfil {
     descripcion: string
     direccion: Direccion
     entrega: string
-    envio?: number
     formas_pago: FormaPago
     id: string
     logo: string
@@ -35,6 +34,10 @@ export interface NegocioPerfil {
     tipo: string
     whats?: string
     repartidores_propios: any
+    envio?: number
+    envio_gratis_pedMin?: number
+    envio_costo_fijo?: boolean
+    envio_desp_pedMin?: number
 }
 
 export interface NegocioSuspendido {
