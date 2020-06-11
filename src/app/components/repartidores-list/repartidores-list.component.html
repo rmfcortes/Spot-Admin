@@ -11,6 +11,7 @@
                 <h2>{{repartidor.nombre}}</h2>
                 <h6 class="medium">{{repartidor.telefono}}</h6>
             </ion-label>
+            <app-stars [calificacion]="repartidor.promedio" [readOnly]="true"></app-stars>
         </ion-item>
     </ion-col>
 </ion-row>

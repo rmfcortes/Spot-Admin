@@ -122,7 +122,7 @@ export class CommonService {
       message: mensaje,
       duration: 2000
     });
-    toast.present();
+    toast.present()
   }
 
 }

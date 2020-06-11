@@ -39,7 +39,6 @@ export class AppComponent {
       url: '/negocios',
       icon: 'business'
     },
-    
   ]
 
   constructor(

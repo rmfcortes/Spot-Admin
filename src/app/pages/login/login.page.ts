@@ -14,8 +14,8 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class LoginPage implements OnInit {
 
-  form: FormGroup;
-  validation_messages
+  form: FormGroup
+  validation_messages: any
   err: string
   persistent = true
 

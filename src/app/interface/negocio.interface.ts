@@ -14,19 +14,27 @@ export interface NegocioPerfil {
     abierto: boolean
     autorizado: boolean
     categoria: string
-    cuenta: string
+    contacto: string
+    correo: string
+    plan: string
     descripcion: string
     direccion: Direccion
     entrega: string
+    envio?: number
+    formas_pago: FormaPago
     id: string
     logo: string
     nombre: string
+    pass: string
     portada: string
+    preparacion?: number
     productos: number
     region: string
     subCategoria: string[]
-    telefono: number
+    telefono: string
     tipo: string
+    whats?: string
+    repartidores_propios: any
 }
 
 export interface NegocioSuspendido {
@@ -79,4 +87,9 @@ export interface InfoFunction {
     promedio: number
     subCategoria: string[]
     tipo: string
+}
+
+export interface FormaPago {
+    efectivo: boolean;
+    tarjeta: boolean;
 }

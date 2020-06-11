@@ -6,7 +6,6 @@ import { FileViewerPage } from 'src/app/modals/file-viewer/file-viewer.page';
 import { RepartidorPage } from 'src/app/modals/repartidor/repartidor.page';
 
 import { RepartidoresService } from 'src/app/services/repartidores.service';
-import { CommonService } from 'src/app/services/common.service';
 
 import { RepartidorPreview, RepartidorInfo } from 'src/app/interface/repartidor.interface';
 
@@ -39,7 +38,6 @@ export class RepartidoresPage implements OnInit {
     private menu: MenuController,
     private modalCtrl: ModalController,
     private repartidoresService: RepartidoresService,
-    private commonService: CommonService,
   ) { }
 
   // Info inicial
@@ -66,6 +64,16 @@ export class RepartidoresPage implements OnInit {
           id: '',
           nombre: '',
           telefono: '',
+          activo: false,
+          calificaciones: 1,
+          distancia: 0,
+          last_notification: 0,
+          last_pedido: 0,
+          lat: 0,
+          lng: 0,
+          maneja_efectivo: false,
+          pedidos_activos: 0,
+          promedio: 5,
         }
       }
     }
@@ -152,6 +160,10 @@ export class RepartidoresPage implements OnInit {
     }
     this.repartidor = null
     this.enable_toogle = false
+  }
+
+  setEfectivo(value: boolean) {
+    this.repartidoresService.setEfectivo(this.region, this.repartidor.preview.id, this.suspendidoSel, value)
   }
 
   async verArchivo(archivo:string) {

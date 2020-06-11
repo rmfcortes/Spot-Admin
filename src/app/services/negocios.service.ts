@@ -1,6 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
+import { finalize } from 'rxjs/operators';
 
 import { AngularFireDatabase } from '@angular/fire/database';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 import { NegocioPreview, NegocioPerfil, Oferta, MasVendidos, InfoFunction, NegocioSuspendido, Busqueda } from '../interface/negocio.interface';
 
@@ -9,7 +11,11 @@ import { NegocioPreview, NegocioPerfil, Oferta, MasVendidos, InfoFunction, Negoc
 })
 export class NegociosService {
 
-  constructor(private db: AngularFireDatabase) { }
+  constructor(
+    private ngZone: NgZone,
+    private fireStorage: AngularFireStorage,
+    private db: AngularFireDatabase
+  ) { }
 
   getSuspendidos(region: string): Promise<NegocioPreview[]> {
     return new Promise((resolve, reject) => {
@@ -69,6 +75,65 @@ export class NegociosService {
 
   setHabilitado(idNegocio: string, value: boolean) {
     this.db.object(`perfiles/${idNegocio}/autorizado`).set(value)
+  }
+
+  // Nuevo negocio 
+
+  nuevoNegocio(negocio: NegocioPerfil) {
+    return new Promise(async (resolve, reject) => {      
+      const idTemporal = this.db.createPushId()
+      try {      
+        await this.db.object(`nuevo_negocio/${negocio.region}/${idTemporal}`).set(negocio)
+        this.db.object(`result_negocios/${negocio.region}/${idTemporal}`).query.ref.on('child_added', snap => {
+          this.ngZone.run(() => {
+            this.db.object(`result_negocios/${negocio.region}/${idTemporal}`).query.ref.off('child_added')
+            const result = snap.val()
+            this.db.object(`result_negocios/${negocio.region}/${idTemporal}`).remove()
+            this.db.object(`nuevo_negocio/${negocio.region}/${idTemporal}`).remove()
+            resolve(result)
+          })
+        })
+      } catch (error) {
+        reject (error)
+      }
+    })
+  }
+
+  getSubCategorias(categoria: string, region: string): Promise<string[]> {
+    return new Promise((resolve, reject) => {
+      const catSub = this.db.list(`categoriaSub/${region}/${categoria}`).valueChanges().subscribe((subCategorias: string[]) => {
+        catSub.unsubscribe()
+        resolve(subCategorias)
+      })
+    })
+  }
+
+  uploadFoto(foto: string, tipo: string): Promise<any> {
+    return new Promise (async (resolve, reject) => {
+      const idTemporal = this.db.createPushId()
+      const ref = this.fireStorage.ref(`negocios/${tipo}/${idTemporal}`)
+      const task = ref.putString( foto, 'base64', { contentType: 'image/jpeg'} )
+
+      const p = new Promise ((resolver, rejecte) => {
+        const tarea = task.snapshotChanges().pipe(
+          finalize(async () => {
+            const downloadURL = await ref.getDownloadURL().toPromise()
+            tarea.unsubscribe()
+            resolver(downloadURL)
+          })
+          ).subscribe(
+            x => { },
+            err => {
+              rejecte(err)
+            }
+          )
+      })
+      resolve(p)
+    })
+  }
+
+  borraFoto(foto: string) {
+    return this.fireStorage.storage.refFromURL(foto).delete()
   }
 
   // Activa

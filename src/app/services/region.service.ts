@@ -26,5 +26,16 @@ export class RegionService {
     this.db.object(`ciudades/${region.referencia}`).set(region)
   }
 
+  // Nuevo negocio Modal
+
+  getRegion(region: string): Promise<Region> {
+    return new Promise((resolve, reject) => {
+      const regSub = this.db.object(`ciudades/${region}`).valueChanges().subscribe((region: Region) => {
+        regSub.unsubscribe()
+        resolve(region)
+      })
+    })
+  }
+
 
 }

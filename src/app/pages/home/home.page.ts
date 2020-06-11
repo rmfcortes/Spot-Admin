@@ -10,7 +10,7 @@ import { PedidosService } from 'src/app/services/pedidos.service';
 import { CommonService } from 'src/app/services/common.service';
 import { RegionService } from 'src/app/services/region.service';
 
-import { RepartidorAsociado, RepartidorPreview } from 'src/app/interface/repartidor.interface';
+import { RepartidorPreview } from 'src/app/interface/repartidor.interface';
 import { Pedido, PedidoPendiente } from 'src/app/interface/pedido.interface';
 import { Region, Ubicacion } from 'src/app/interface/region.interface';
 
@@ -30,9 +30,9 @@ export class HomePage implements OnInit{
   pedidos: PedidoPendiente[] = []
   pedido: Pedido
   
-  repartidores: RepartidorAsociado[]
+  repartidores: RepartidorPreview[]
   radioRepartidores = []
-  repartidor: RepartidorAsociado
+  repartidor: RepartidorPreview
   repSub: Subscription
 
   map: any
@@ -130,7 +130,7 @@ export class HomePage implements OnInit{
     this.openedWindow = null
     if (this.repSub) this.repSub.unsubscribe()
     this.repSub = this.repartidoresService.getRepartidoresActivos(this.regiones[i].referencia)
-    .subscribe((repartidores: RepartidorAsociado[]) => {
+    .subscribe((repartidores: RepartidorPreview[]) => {
       this.repartidores = repartidores
       if (this.repartidores.length === 0) {
         const polygon = new google.maps.Polygon({paths: this.regiones[i].ubicacion})
@@ -250,7 +250,7 @@ export class HomePage implements OnInit{
     });
   }
 
-  verInfoRepartidor(i: number, repartidor: RepartidorAsociado) {
+  verInfoRepartidor(i: number, repartidor: RepartidorPreview) {
     this.openedWindow = i
     this.repartidor = repartidor
   }
@@ -307,7 +307,7 @@ export class HomePage implements OnInit{
 
   // Tracks
 
-  trackByRepartidor(index:number, el: RepartidorAsociado): string {
+  trackByRepartidor(index:number, el: RepartidorPreview): string {
     return el.id
   }
 

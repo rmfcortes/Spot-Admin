@@ -12,6 +12,7 @@ import { RepartidorPageModule } from 'src/app/modals/repartidor/repartidor.modul
 
 import { repartidoresListComponent } from 'src/app/components/repartidores-list/repartidores-list.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { StarsComponent } from 'src/app/components/stars/stars.component';
 
 @NgModule({
   imports: [
@@ -23,6 +24,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
     RepartidorPageModule,
     RepartidoresPageRoutingModule
   ],
-  declarations: [RepartidoresPage, repartidoresListComponent]
+  declarations: [RepartidoresPage, repartidoresListComponent, StarsComponent]
 })
 export class RepartidoresPageModule {}

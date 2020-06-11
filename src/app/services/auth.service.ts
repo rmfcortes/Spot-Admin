@@ -51,7 +51,7 @@ export class AuthService {
         if (user) return resolve(true)
       }
       return resolve(false)
-    });
+    })
   }
 
   async getUser() {
@@ -69,14 +69,12 @@ export class AuthService {
   async revisaFireAuth() {
     return new Promise((resolve, reject) => {
       const authSub = this.angularFireAuth.authState.subscribe(async (user) => {
-        authSub.unsubscribe();
+        authSub.unsubscribe()
         if (user) {
           if (localStorage.getItem('persistent')) this.persitent(user.uid, user.displayName)
           else this.notPersitent(user.uid, user.displayName)
-          resolve(true);
-        } else {
-          resolve(false)
-        }
+          resolve(true)
+        } else resolve(false)
       })
     })
   }
@@ -88,7 +86,7 @@ export class AuthService {
         await this.checkIsAdmin(resp.user.uid)
         if (data.isPersistent) this.persitent(resp.user.uid, resp.user.displayName)
         else this.notPersitent(resp.user.uid, resp.user.displayName)
-        resolve(true);
+        resolve(true)
       } catch (error) {
         if (error.code) {
           switch (error.code) {
@@ -110,7 +108,7 @@ export class AuthService {
           }
         } else reject('Lo sentimos, surgió un error inesperado. ' + error)
       }
-    });
+    })
   }
 
   checkIsAdmin(uid: string) {
@@ -135,7 +133,7 @@ export class AuthService {
       this.uidService.setUid(uid)
       this.uidService.setNombre(nombre)
       resolve()
-    });
+    })
   }
 
   notPersitent(uid, nombre) {

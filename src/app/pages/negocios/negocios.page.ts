@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+
+import { NegocioPage } from 'src/app/modals/negocio/negocio.page';
 
 import { NegociosService } from 'src/app/services/negocios.service';
 import { CommonService } from 'src/app/services/common.service';
@@ -41,6 +44,7 @@ export class NegociosPage implements OnInit {
   noMore = false
 
   constructor(
+    private modalCtrl: ModalController,
     private negocioService: NegociosService,
     private commonService: CommonService,
   ) { }
@@ -100,6 +104,47 @@ export class NegociosPage implements OnInit {
     this.negocio_perfil = await this.negocioService.getDetallesNegocio(negocio.id)
     setTimeout(() => this.enable_toogle = true, 500)
   }
+
+  async nuevoNegocio() {
+    const negocio: NegocioPerfil = {
+      abierto: false,
+      autorizado: true,
+      categoria: this.categoria,
+      plan: 'basico',
+      correo: '',
+      descripcion: '',
+      direccion: {
+        direccion: '',
+        lat: null,
+        lng: null
+      },
+      id: '',
+      logo: '',
+      portada: '',
+      productos: 0,
+      subCategoria: [],
+      nombre: '',
+      pass: '',
+      region: this.region,
+      contacto: '',
+      telefono: '',
+      tipo: '',
+      entrega: '',
+      formas_pago: {
+        efectivo: false,
+        tarjeta: false
+      },
+      repartidores_propios: true
+    }
+    const modal = await this.modalCtrl.create({
+      component: NegocioPage,
+      cssClass: 'modal_file',
+      componentProps: {negocio}
+    })
+
+    return await modal.present()
+  }
+
 
   async setHabilitado(value: boolean) {
     if (!this.enable_toogle) return

@@ -90,6 +90,14 @@ export class RepartidoresService {
     this.db.object(`repartidores_asociados_info/${region}/suspendidos/preview/${repartidor.preview.id}`).remove()
   }
 
+  setEfectivo(region: string, repartidorId: string, suspendido: boolean, value: boolean) {
+    if (suspendido) {
+      this.db.object(`repartidores_asociados_info/${region}/suspendidos/preview/${repartidorId}/maneja_efectivo`).set(value)
+    } else {
+      this.db.object(`repartidores_asociados_info/${region}/preview/${repartidorId}/maneja_efectivo`).set(value)
+    }
+  }
+
   // Repartidor modal
 
   guardaFoto(foto: string, region: string, repartidor: RepartidorInfo): Promise<any> {
@@ -144,9 +152,13 @@ export class RepartidoresService {
 
   guardaRepartidor(region: string, repartidor: RepartidorInfo) {
     return new Promise(async (resolve, reject) => {
-      await this.db.object(`nuevo_repartidor/${region}/${repartidor.preview.id}`).set(repartidor)
-      resolve()
-    });
+      try {        
+        await this.db.object(`nuevo_repartidor/${region}/${repartidor.preview.id}`).set(repartidor)
+        resolve()
+      } catch (error) {
+        reject(error)
+      }
+    })
   }
 
   result(region: string, idRepartidor: string) {
