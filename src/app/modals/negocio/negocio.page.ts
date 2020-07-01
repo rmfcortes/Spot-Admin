@@ -163,7 +163,10 @@ export class NegocioPage implements OnInit, AfterViewInit {
     }
     await this.commonService.presentLoading()
     if (this.negocio.repartidores_propios === 'true') this.negocio.repartidores_propios = true
-    else this.negocio.repartidores_propios = false
+    else {
+      this.negocio.repartidores_propios = false
+      this.negocio.envio_gratis_pedMin = null
+    }
     try {
       // Guarda fotos y obtiene urls
       this.negocio.portada = await this.negocioService.uploadFoto(this.base64Portada, 'portada')

@@ -21,7 +21,7 @@ export interface HistorialPedido {
     pedidos: Pedido[];
     completados: Pedido[];
     cancelados_user: Pedido[];
-    cancelados_driver: Pedido[];
+    cancelados_negocio: Pedido[];
     ver_detalles: boolean;
 }
 

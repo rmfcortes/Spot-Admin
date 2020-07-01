@@ -114,10 +114,10 @@
             <ion-label color="medium" position="floating" class="ion-text-wrap">Costo de envío</ion-label>
             <ion-input (keyup.enter)="$event.target.blur();" [(ngModel)]="negocio.envio" type="number" name="envio" minlength="1" required></ion-input>
           </ion-item>
-          <ion-item *ngIf="negocio.tipo === 'productos' && negocio.entrega === 'inmediato'">
+          <!-- <ion-item *ngIf="negocio.tipo === 'productos' && negocio.entrega === 'inmediato'">
             <ion-label color="medium" position="floating" class="ion-text-wrap">Pedido mínimo (opcional)</ion-label>
             <ion-input (keyup.enter)="$event.target.blur();" [(ngModel)]="negocio.envio_desp_pedMin" type="number" name="pedido_min" minlength="1"></ion-input>
-          </ion-item>
+          </ion-item> -->
           <ion-item *ngIf="negocio.tipo === 'productos' && negocio.repartidores_propios">
             <ion-label color="medium" position="floating" class="ion-text-wrap">Entregas gratis en cierto pedido mínimo (opcional)</ion-label>
             <ion-input (keyup.enter)="$event.target.blur();" [(ngModel)]="negocio.envio_gratis_pedMin" type="number" name="envio_gratis" minlength="1"></ion-input>

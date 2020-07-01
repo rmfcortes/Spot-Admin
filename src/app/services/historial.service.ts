@@ -20,12 +20,12 @@ export class HistorialService {
         dateSub.unsubscribe()
         resolve(date)
       })
-    });
+    })
   }
 
-  setFirstDate(): Promise<string> {
+  setFirstDate(region: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      const dateSub = this.db.object('historial/por_fecha').valueChanges().subscribe(historial => {
+      const dateSub = this.db.object(`pedidos/historial/${region}/por_fecha`).valueChanges().subscribe(historial => {
         dateSub.unsubscribe()
         if (historial) {
           const fechas = Object.entries(historial)
@@ -39,7 +39,7 @@ export class HistorialService {
           }
         } else resolve(null)
       })
-    });
+    })
   }
 
   getRegistrosByRange(region: string, initial_date: string, end_date: string): Promise<HistorialPedido[]> {
@@ -53,7 +53,7 @@ export class HistorialService {
             fecha: trip.key,
             pedidos: Object.values(trip.payload.val()),
             completados: Object.values(trip.payload.val()).filter(t => t.entregado),
-            cancelados_driver: Object.values(trip.payload.val()).filter(t => t.cancelado),
+            cancelados_negocio: Object.values(trip.payload.val()).filter(t => t.cancelado),
             cancelados_user: Object.values(trip.payload.val()).filter(t => t.cancelado_by_user),
             ver_detalles: false
           }
@@ -61,7 +61,7 @@ export class HistorialService {
         }
         resolve(trips)
       })
-    });
+    })
   }
   
   // getPedidosByRepartidor(region: string, idRepartidor: string, intial_date: string, end_date: string): Promise<HistorialPedido[]> {

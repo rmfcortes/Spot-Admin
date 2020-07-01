@@ -77,7 +77,7 @@ export class HistorialPage implements OnInit {
     this.range_change_repartidores = true
     this.first_date = localStorage.getItem('first_date')
     if (!this.first_date) this.first_date = await this.historialService.getFirstDate(region)
-    if (!this.first_date) this.first_date = await this.historialService.setFirstDate()
+    if (!this.first_date) this.first_date = await this.historialService.setFirstDate(region)
     if (!this.first_date) this.no_registros = 'No hay registro de pedidos para esta region'
   }
 
@@ -164,14 +164,14 @@ export class HistorialPage implements OnInit {
       const historial: HistorialPedido = {
         fecha: el.fecha,
         pedidos: [],
-        cancelados_driver: [],
+        cancelados_negocio: [],
         cancelados_user: [],
         completados: [],
         ver_detalles: el.ver_detalles
       }
       historial.pedidos = el.pedidos.filter(p => p.repartidor && p.repartidor.id === repartidor.id)
       if (historial.pedidos) {
-        historial.cancelados_driver = el.cancelados_driver.filter(p => p.repartidor && p.repartidor.id === repartidor.id)
+        historial.cancelados_negocio = el.cancelados_negocio.filter(p => p.repartidor && p.repartidor.id === repartidor.id)
         historial.cancelados_user = el.cancelados_user.filter(p => p.repartidor && p.repartidor.id === repartidor.id)
         historial.completados = el.completados.filter(p => {
           if (p.repartidor && p.repartidor.id === repartidor.id) {
@@ -199,14 +199,14 @@ export class HistorialPage implements OnInit {
       const historial: HistorialPedido = {
         fecha: el.fecha,
         pedidos: [],
-        cancelados_driver: [],
+        cancelados_negocio: [],
         cancelados_user: [],
         completados: [],
         ver_detalles: el.ver_detalles
       }
       historial.pedidos = el.pedidos.filter(p => p.negocio.idNegocio === negocio.id)
       if (historial.pedidos) {
-        historial.cancelados_driver = el.cancelados_driver.filter(p => p.repartidor && p.repartidor.id === negocio.id)
+        historial.cancelados_negocio = el.cancelados_negocio.filter(p => p.repartidor && p.repartidor.id === negocio.id)
         historial.cancelados_user = el.cancelados_user.filter(p => p.repartidor && p.repartidor.id === negocio.id)
         historial.completados = el.completados.filter(p => {
           if (p.negocio.idNegocio === negocio.id) {
