@@ -143,7 +143,7 @@ export class RepartidoresPage implements OnInit {
       else this.suspendidoSel = false
       setTimeout(() => {
         this.enable_toogle = true
-      }, 500);
+      }, 500)
     })
   }
 

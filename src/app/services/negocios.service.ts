@@ -4,7 +4,7 @@ import { finalize } from 'rxjs/operators';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { AngularFireStorage } from '@angular/fire/storage';
 
-import { NegocioPreview, NegocioPerfil, Oferta, MasVendidos, InfoFunction, NegocioSuspendido, Busqueda } from '../interface/negocio.interface';
+import { NegocioPreview, NegocioPerfil, Oferta, MasVendidos, InfoFunction, NegocioSuspendido, Busqueda, Categoria } from '../interface/negocio.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -26,11 +26,11 @@ export class NegociosService {
     })
   }
 
-  getCategorias(region: string): Promise<string[]> {
+  getCategorias(region: string): Promise<Categoria[]> {
     return new Promise((resolve, reject) => {
-      const catSub = this.db.object(`categoria/${region}`).valueChanges().subscribe(categorias => {
+      const catSub = this.db.list(`categoria/${region}`).valueChanges().subscribe((categorias: Categoria[]) => {
         catSub.unsubscribe()
-        if (categorias) resolve(Object.keys(categorias))
+        if (categorias) resolve(categorias)
         else resolve([])
       })
     })
@@ -134,6 +134,41 @@ export class NegociosService {
 
   borraFoto(foto: string) {
     return this.fireStorage.storage.refFromURL(foto).delete()
+  }
+
+  // Nueva categoria 
+
+  uploadIcon(file, nombre: string, region: string): Promise<any> {
+    return new Promise (async (resolve, reject) => {
+      const ref = this.fireStorage.ref(`categorias/iconos/${region}-${nombre}`)
+      const task = ref.put( file )
+      const p = new Promise ((resolver, rejecte) => {
+        const tarea = task.snapshotChanges().pipe(
+          finalize(async () => {
+            const archivoURL = await ref.getDownloadURL().toPromise()
+            tarea.unsubscribe()
+            resolver(archivoURL)
+          })
+          ).subscribe(
+            x => { },
+            err => {
+              rejecte(err)
+            }
+          )
+      })
+      resolve(p)
+    })
+  }
+
+  setCategoria(categoria: Categoria, region: string): Promise<boolean> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await this.db.object(`categoria/${region}/${categoria.categoria}`).set(categoria)
+        resolve(true)
+      } catch (error) {
+        reject(error)
+      }
+    })
   }
 
   // Activa

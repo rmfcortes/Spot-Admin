@@ -96,3 +96,8 @@ export interface FormaPago {
     efectivo: boolean;
     tarjeta: boolean;
 }
+
+export interface Categoria {
+    categoria: string;
+    foto: string;
+}

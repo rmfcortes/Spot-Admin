@@ -6,8 +6,9 @@ import { NegocioPage } from 'src/app/modals/negocio/negocio.page';
 import { NegociosService } from 'src/app/services/negocios.service';
 import { CommonService } from 'src/app/services/common.service';
 
-import { NegocioPreview, NegocioPerfil } from 'src/app/interface/negocio.interface';
+import { NegocioPreview, NegocioPerfil, Categoria } from 'src/app/interface/negocio.interface';
 import { Ubicacion } from 'src/app/interface/region.interface';
+import { CategoriaPage } from 'src/app/modals/categoria/categoria.page';
 
 @Component({
   selector: 'app-negocios',
@@ -24,7 +25,7 @@ export class NegociosPage implements OnInit {
   region: string
 
   categoria: string
-  categorias: string[] = []
+  categorias: Categoria[] = []
   verCategorias = false
 
   cargando_negocios = false
@@ -145,6 +146,21 @@ export class NegociosPage implements OnInit {
     return await modal.present()
   }
 
+  async nuevaCategoria() {
+    const modal = await this.modalCtrl.create({
+      component: CategoriaPage,
+      componentProps: {region: this.region}
+    })
+
+    modal.onWillDismiss().then(resp => {
+      if (resp.data) {
+        this.commonService.presentToast('Categoría agregada')
+        this.categorias.unshift(resp.data)
+      }
+    })
+
+    return await modal.present()
+  }
 
   async setHabilitado(value: boolean) {
     if (!this.enable_toogle) return

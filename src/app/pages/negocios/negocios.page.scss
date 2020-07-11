@@ -10,3 +10,16 @@
     border-right: var(--ion-color-primary) 4px solid;
     background: #ffd7b6;
 }
+
+ion-thumbnail {
+    max-width: 2rem;
+}
+
+.btn_agregar {
+    --border-style: dashed !important;
+    width: 100%;
+    --padding-bottom: 1rem;
+    --padding-end: 1rem;
+    --padding-start: 1rem;
+    --padding-top: 1rem;
+}

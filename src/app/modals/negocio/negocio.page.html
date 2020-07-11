@@ -127,7 +127,11 @@
             <ion-select [(ngModel)]="negocio.envio_costo_fijo" color="medium" okText="Aceptar" cancelText="Cancelar" required name="costo_fijo">
               <ion-select-option value="true">Sí, la cuota de envío es fija</ion-select-option>
               <ion-select-option value="false">No, calcular en base al kilometraje</ion-select-option>
-          </ion-select>
+            </ion-select>
+          </ion-item>
+          <ion-item *ngIf="negocio.envio_costo_fijo">
+            <ion-label color="medium" position="floating" class="ion-text-wrap">Costo de envío</ion-label>
+            <ion-input (keyup.enter)="$event.target.blur();" [(ngModel)]="negocio.envio" type="number" name="envio_fijo" minlength="1" required></ion-input>
           </ion-item>
           <ion-item *ngIf="negocio.tipo === 'productos' && negocio.entrega === 'inmediato'">
               <ion-label color="medium" position="floating" class="ion-text-wrap">Tiempo de preparacion aprox. en minutos (opcional)</ion-label>

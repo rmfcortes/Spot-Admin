@@ -26,10 +26,18 @@
                           <ion-icon color="medium" slot="end" name="chevron-down"></ion-icon>
                       </ion-item>
                   </ng-template>
-                  <!-- Lista de regiones -->
+                  <!-- Lista de categorias -->
                   <div *ngIf="verCategorias">
-                      <ion-item *ngFor="let item of categorias" (click)="setCategoria(item)">
-                          <ion-label class="pointer">{{item | titlecase}}</ion-label>
+                      <ion-item lines="none">
+                        <ion-button (click)="nuevaCategoria()" expand="block" fill="outline" color="medium" class="btn_agregar ion-text-wrap">
+                            Agregar categoría
+                        </ion-button>
+                      </ion-item>
+                      <ion-item *ngFor="let item of categorias" (click)="setCategoria(item.categoria)" lines="none">
+                          <ion-thumbnail style="margin-right: 1rem;">
+                              <img [src]="item.foto" style="width: 100%; object-fit: contain;"/>
+                          </ion-thumbnail>
+                          <ion-label class="pointer">{{item.categoria | titlecase}}</ion-label>
                       </ion-item>
                   </div>
               </ion-card>

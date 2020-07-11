@@ -39,14 +39,14 @@ export class RepartidorPage implements OnInit {
     const modal = await this.modalCtrl.create({
       component: CropImageModal,
       componentProps: {imageChangedEvent, aspect, maintainAspectRatio}
-    });
+    })
     modal.onWillDismiss().then(resp => {
       if (resp.data) {
-        this.repartidor.preview.foto = resp.data;
-        this.base64 = resp.data.split('data:image/png;base64,')[1];
+        this.repartidor.preview.foto = resp.data
+        this.base64 = resp.data.split('data:image/png;base64,')[1]
       }
-    });
-    return await modal.present();
+    })
+    return await modal.present()
   }
 
   async setArchivo(event) {
