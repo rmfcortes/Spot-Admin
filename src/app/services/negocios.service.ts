@@ -171,6 +171,17 @@ export class NegociosService {
     })
   }
 
+  setSubCategorias(categoria: Categoria, subCategorias: string[], region: string): Promise<boolean> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await this.db.object(`categoriaSub/${region}/${categoria.categoria}`).set(subCategorias)
+        resolve(true)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
   // Activa
 
   activa(region: string, idNegocio: string, preview: NegocioPreview, perfil: NegocioPerfil) {

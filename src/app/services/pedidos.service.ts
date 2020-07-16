@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
 
+import { Pedido } from '../interface/pedido.interface';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -13,7 +15,7 @@ export class PedidosService {
   // Home Page
 
   listenPedidos(fecha: string) {
-    return this.db.list(`pedidos/por_fecha/${fecha}`, data => data.orderByChild('pendiente_repartidor').equalTo(true)).query.ref
+    return this.db.list(`pedidos/seguimiento_admin/${fecha}`, data => data.orderByChild('repartidor').equalTo(null)).query.ref
   }
 
   formatDate(d: Date): Promise<string> {
@@ -31,8 +33,8 @@ export class PedidosService {
     });
   }
 
-  asignarPedido(idRepartidor: string, idPedido: string) {
-    this.db.object(`pendientes_aceptacion/${idRepartidor}/${idPedido}`).set(true)
+  asignarPedido(idRepartidor: string, pedido: Pedido) {
+    this.db.object(`pendientes_aceptacion/${idRepartidor}/${pedido.id}`).set(pedido)
   }
 
 }

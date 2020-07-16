@@ -23,6 +23,7 @@ export class HomePage implements OnInit{
 
   icon_cliente = '../../../assets/img/pin.png'
   icon_repartidor = '../../../assets/img/repartidor.png'
+  icon_negocio = '../../../assets/img/negocio_pin.png'
 
   regiones: Region[] = []
   nueva_region = false
@@ -105,6 +106,7 @@ export class HomePage implements OnInit{
           this.regiones[iRegion].pedidos = 1
         }
       }
+      console.log(this.pedidos);
     })
   }
 
@@ -135,6 +137,8 @@ export class HomePage implements OnInit{
       if (this.repartidores.length === 0) {
         const polygon = new google.maps.Polygon({paths: this.regiones[i].ubicacion})
         this.map.fitBounds(this.getPolygonBounds(polygon))
+      } else {
+        this.getRadioRepartidores()
       }
     })
   }
@@ -267,7 +271,7 @@ export class HomePage implements OnInit{
         if (i >= 0) {
           const y = this.pedidos[i].pedidos.findIndex(p => p.id === this.pedido.id)
           if (y >= 0 && !this.pedidos[i].pedidos[y].repartidor) {
-            this.pedidoService.asignarPedido(resp, this.pedidos[i].pedidos[y].id)
+            this.pedidoService.asignarPedido(resp, this.pedidos[i].pedidos[y])
           } else {
             this.commonService.presentAlert('', 'El servicio fue cancelado por el usuario o ya fue tomado por algún repartidor') 
           }

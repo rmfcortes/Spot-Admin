@@ -40,8 +40,8 @@
             </agm-marker>
             <!-- Servicios markers -->
             <div *ngFor="let pendientes of pedidos; trackBy:trackByPendiente">
-                <agm-marker *ngFor="let item of pendientes.pedidos; let i = index; trackBy:trackByPedido" [agmFitBounds]="true" (markerClick)="verInfoPedido(i, item)" [iconUrl]='{"url": icon_cliente,"scaledSize": {"height": 40, "width": 30}}' [latitude]="item.negocio.direccion.lat"
-                    [longitude]="item.negocio.direccion.lng" [animation]="'DROP'">
+                <agm-marker *ngFor="let item of pendientes.pedidos; let i = index; trackBy:trackByPedido" [agmFitBounds]="true" (markerClick)="verInfoPedido(i, item)" [iconUrl]='{"url": item.aceptado ? icon_cliente : icon_negocio,"scaledSize": {"height": 40, "width": 30}}' [latitude]="item.negocio.direccion.lat"
+                    [longitude]="item.negocio.direccion.lng" [animation]="'DROP'" [fitBoundsPadding]="200">
                     <agm-info-window [disableAutoPan]="true" [isOpen]="isInfoWindowPedido(i)">
                         <ion-item *ngIf="pedido" lines="none">
                             <ion-avatar style="margin-right: 1rem;">
@@ -53,7 +53,7 @@
                                 <h4>Solicitado: {{pedido.createdAt | date:'h:mm a'}}</h4>
                             </ion-label>
                         </ion-item>
-                        <ion-button (click)="asignarPedido()" shape="round">
+                        <ion-button (click)="asignarPedido()" shape="round" *ngIf="pedido && pedido.aceptado && !pedido.negocio.repartidores_propios">
                             Asignar viaje
                         </ion-button>
                     </agm-info-window>

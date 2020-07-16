@@ -21,6 +21,8 @@ export class CategoriaPage implements OnInit {
     categoria: '',
     foto: ''
   }
+  subCategorias: string[] = []
+  subCategoria = ''
   file: string
 
   loading = false
@@ -38,11 +40,23 @@ export class CategoriaPage implements OnInit {
     this.file = event.target.files[0]
   }
 
+  addSubCategoria() {
+    this.subCategoria = this.subCategoria.trim()
+    if (!this.subCategoria) return
+    this.subCategorias.unshift(this.subCategoria)
+    this.subCategoria = ''
+  }
+
+  borrarSubCategoria(i: number) {
+    this.subCategorias.splice(i, 1)
+  }
+
   async guardar() {
     this.loading = true
     try {
       this.categoria.foto = await this.categoriaService.uploadIcon(this.file, this.categoria.categoria, this.region)
       await this.categoriaService.setCategoria(this.categoria, this.region)
+      await this.categoriaService.setSubCategorias(this.categoria, this.subCategorias, this.region)
       this.loading = false
       this.modalCtrl.dismiss(this.categoria)
     } catch (error) {

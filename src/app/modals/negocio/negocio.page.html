@@ -103,7 +103,7 @@
                 <ion-select-option value="planeado">Planeado</ion-select-option>
             </ion-select>
           </ion-item>
-          <ion-item *ngIf="negocio.tipo === 'productos' && negocio.entrega === 'inmediato'">
+          <ion-item *ngIf="negocio.tipo === 'productos'">
             <ion-label color="medium">Manejarás tus propios repartidores</ion-label>
             <ion-select [(ngModel)]="negocio.repartidores_propios" color="medium" okText="Aceptar" cancelText="Cancelar" required name="entrega">
                 <ion-select-option value="true">Tengo mis propios repartidores</ion-select-option>
