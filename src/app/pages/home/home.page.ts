@@ -81,8 +81,10 @@ export class HomePage implements OnInit{
     const fecha = await this.pedidoService.formatDate(new Date())
     this.pedidoService.listenPedidos(fecha).off('child_added')
     this.pedidoService.listenPedidos(fecha).off('child_removed')
+    this.pedidoService.listenPedidos(fecha).off('child_changed')
     this.pedidoAdded(fecha)
-    
+    this.pedidoChanged(fecha)
+    this.pedidoRemoved(fecha)
   }
 
   pedidoAdded(fecha: string) {
@@ -106,7 +108,6 @@ export class HomePage implements OnInit{
           this.regiones[iRegion].pedidos = 1
         }
       }
-      console.log(this.pedidos);
     })
   }
 
@@ -124,6 +125,15 @@ export class HomePage implements OnInit{
         if (pedido.pedidos.length > 0) return pedido
         else return null
       })
+    })
+  }
+
+  pedidoChanged(fecha: string) {
+    this.pedidoService.listenPedidos(fecha).on('child_changed', snapshot => {
+      const pedido_actualizado: Pedido = snapshot.val()
+      const i = this.pedidos.findIndex(r => r.region === pedido_actualizado.region)
+      const y = this.pedidos[i].pedidos.findIndex(p => p.id === pedido_actualizado.id)
+      this.pedidos[i].pedidos[y] = pedido_actualizado
     })
   }
 
@@ -294,19 +304,13 @@ export class HomePage implements OnInit{
   }
 
   isInfoWindowPedido(i) {
-    if (this.openedPedidoWindow === i) {
-      return true;
-    } else {
-      return false;
-    }
+    if (this.openedPedidoWindow === i) return true
+    return false
   }
 
   isInfoWindowOpen(i) {
-    if (this.openedWindow === i) {
-      return true;
-    } else {
-      return false;
-    }
+    if (this.openedWindow === i) return true
+    return false
   }
 
   // Tracks

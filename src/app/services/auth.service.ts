@@ -29,18 +29,22 @@ export class AuthService {
   async checkFireAuthTest() {
     return new Promise((resolve, reject) => {
       const authSub = this.angularFireAuth.authState.subscribe(resp => {
-        authSub.unsubscribe()
-        this.setAuthChecked()
-        resolve(resp)
+        if (resp) {
+          authSub.unsubscribe()
+          this.setAuthChecked()
+          resolve(resp)
+        } else {
+          reject()
+        }
       },
         err => reject(err)
-      );
-    });
+      )
+    })
   }
 
   checkUser(): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      let user;
+      let user
       user = this.uidService.getUid()
       if (user) return resolve(true)
       user = await this.getUser()

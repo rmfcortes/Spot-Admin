@@ -106,13 +106,9 @@
           <ion-item *ngIf="negocio.tipo === 'productos'">
             <ion-label color="medium">Manejarás tus propios repartidores</ion-label>
             <ion-select [(ngModel)]="negocio.repartidores_propios" color="medium" okText="Aceptar" cancelText="Cancelar" required name="entrega">
-                <ion-select-option value="true">Tengo mis propios repartidores</ion-select-option>
-                <ion-select-option value="false">Necesitaré repartidores externos</ion-select-option>
+                <ion-select-option [value]="true">Tengo mis propios repartidores</ion-select-option>
+                <ion-select-option [value]="false">Necesitaré repartidores externos</ion-select-option>
             </ion-select>
-          </ion-item>
-          <ion-item *ngIf="negocio.tipo === 'productos' && negocio.repartidores_propios && negocio.entrega === 'inmediato'">
-            <ion-label color="medium" position="floating" class="ion-text-wrap">Costo de envío</ion-label>
-            <ion-input (keyup.enter)="$event.target.blur();" [(ngModel)]="negocio.envio" type="number" name="envio" minlength="1" required></ion-input>
           </ion-item>
           <!-- <ion-item *ngIf="negocio.tipo === 'productos' && negocio.entrega === 'inmediato'">
             <ion-label color="medium" position="floating" class="ion-text-wrap">Pedido mínimo (opcional)</ion-label>
@@ -125,8 +121,8 @@
           <ion-item *ngIf="negocio.tipo === 'productos' && negocio.repartidores_propios">
             <ion-label color="medium" position="floating" class="ion-text-wrap">¿El costo de envío es fijo?</ion-label>
             <ion-select [(ngModel)]="negocio.envio_costo_fijo" color="medium" okText="Aceptar" cancelText="Cancelar" required name="costo_fijo">
-              <ion-select-option value="true">Sí, la cuota de envío es fija</ion-select-option>
-              <ion-select-option value="false">No, calcular en base al kilometraje</ion-select-option>
+              <ion-select-option [value]="true">Sí, la cuota de envío es fija</ion-select-option>
+              <ion-select-option [value]="false">No, calcular en base al kilometraje</ion-select-option>
             </ion-select>
           </ion-item>
           <ion-item *ngIf="negocio.envio_costo_fijo">

@@ -121,7 +121,6 @@ export class NegocioPage implements OnInit, AfterViewInit {
     this.negocio.direccion.lng = evento.coords.lng
   }
 
-
   async guardar() {
     if (!this.base64Logo) {
       this.commonService.presentAlert('Agrega tu logotipo', 'Antes de continuar por favor agrega una imagen en tu logotipo')
@@ -162,11 +161,7 @@ export class NegocioPage implements OnInit, AfterViewInit {
       }
     }
     await this.commonService.presentLoading()
-    if (this.negocio.repartidores_propios === 'true') this.negocio.repartidores_propios = true
-    else {
-      this.negocio.repartidores_propios = false
-      this.negocio.envio_gratis_pedMin = null
-    }
+
     try {
       // Guarda fotos y obtiene urls
       this.negocio.portada = await this.negocioService.uploadFoto(this.base64Portada, 'portada')
@@ -181,7 +176,7 @@ export class NegocioPage implements OnInit, AfterViewInit {
           break
         case 'auth/invalid-email':
           this.borraFotos()
-          this.commonService.presentAlert('Email inválido', 'El correo que intentas registrar no corresponde a un email válido')
+          this.commonService.presentAlert('Email inválido', 'El correo que intentas registrar no corresponde a un email válido o corresponde a una cuenta existente')
           break
         case 'auth/invalid-password':
           this.borraFotos()

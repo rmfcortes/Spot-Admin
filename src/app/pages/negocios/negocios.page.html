@@ -33,7 +33,7 @@
                             Agregar categoría
                         </ion-button>
                       </ion-item>
-                      <ion-item *ngFor="let item of categorias" (click)="setCategoria(item.categoria)" lines="none">
+                      <ion-item *ngFor="let item of categorias; let odd = odd" (click)="setCategoria(item.categoria)" lines="none" [style.background]="odd ? 'var(--ion-color-tenue)' : 'white'">
                           <ion-thumbnail style="margin-right: 1rem;">
                               <img [src]="item.foto" style="width: 100%; object-fit: contain;"/>
                           </ion-thumbnail>
@@ -51,7 +51,7 @@
 
               <!-- No hay categorias -->
               <ion-item lines="none" style="text-align: center;" *ngIf="region && categorias.length === 0">
-                  <ion-label color="medium">No hay categorías en esta region</ion-label>
+                  <ion-label color="medium" class="ion-text-wrap">No hay categorías en esta region</ion-label>
               </ion-item>
 
               <!-- No hay negocios -->

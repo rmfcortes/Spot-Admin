@@ -15,7 +15,7 @@ export class PedidosService {
   // Home Page
 
   listenPedidos(fecha: string) {
-    return this.db.list(`pedidos/seguimiento_admin/${fecha}`, data => data.orderByChild('repartidor').equalTo(null)).query.ref
+    return this.db.list(`pedidos/seguimiento_admin/${fecha}`).query.ref
   }
 
   formatDate(d: Date): Promise<string> {

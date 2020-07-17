@@ -6,7 +6,7 @@
         </ion-item>
     </ng-container>
     <ng-template #regionesTemp>
-        <ion-item (click)="verRegiones = true" class="pointer">
+        <ion-item (click)="verRegiones = true" class="pointer" lines="none">
             <ion-label color="medium" class="pointer" *ngIf="!region">Regiones</ion-label>
             <ion-label color="primary" class="pointer" *ngIf="region">{{region | titlecase}}</ion-label>
             <ion-icon color="medium" slot="end" name="chevron-down"></ion-icon>
@@ -14,7 +14,7 @@
     </ng-template>
     <!-- Lista de regiones -->
     <div *ngIf="verRegiones">
-        <ion-item *ngFor="let item of regiones" (click)="setRegion(item)">
+        <ion-item *ngFor="let item of regiones; let odd = odd" (click)="setRegion(item)" lines="none" [style.background]="odd ? 'var(--ion-color-tenue)' : 'white'">
             <ion-label class="pointer">{{item | titlecase}}</ion-label>
         </ion-item>
     </div>
