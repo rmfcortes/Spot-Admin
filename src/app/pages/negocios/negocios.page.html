@@ -76,10 +76,10 @@
               </ion-item>
 
               <!-- Lista negocios Autorizados-->
-              <ion-item-divider style="margin-top: 1.5rem;" *ngIf="negocios.length > 0">
+              <ion-item-divider style="margin-top: 1.5rem;" *ngIf="negocios.length > 0" lines="none">
                   <ion-label color="primary">Autorizados</ion-label>
               </ion-item-divider>
-              <ion-item *ngFor="let item of negocios; trackBy: trackByNegocio" detail (click)="verNegocio(item)" [ngClass]="item === negocio_preview ? 'negocioSel' : 'negocio'">
+              <ion-item *ngFor="let item of negocios; trackBy: trackByNegocio; let odd = odd" detail (click)="verNegocio(item)" [ngClass]="item === negocio_preview ? 'negocioSel' : 'negocio'" [style.background]="odd ? 'var(--ion-color-tenue)' : 'white'" lines="none">
                   <ion-avatar>
                       <img [src]="item.foto" />
                   </ion-avatar>
