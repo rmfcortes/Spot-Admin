@@ -14,8 +14,8 @@ export class PedidosService {
 
   // Home Page
 
-  listenPedidos(fecha: string) {
-    return this.db.list(`pedidos/seguimiento_admin/${fecha}`).query.ref
+  listenPedidos() {
+    return this.db.list(`pedidos/seguimiento_admin`).query.ref
   }
 
   formatDate(d: Date): Promise<string> {

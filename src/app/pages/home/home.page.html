@@ -22,7 +22,7 @@
 
     <!-- Mapa -->
     <div style="overflow-y: hidden; height: 93vh; position: static;">
-        <agm-map style="height: 100vh;" [latitude]="centro.lat" [longitude]="centro.lng" [disableDefaultUI]="true" [streetViewControl]="false" [zoomControl]="false" [fitBounds]="true" fitBoundsPadding="bottom: 10; left: 10; right: 10; top: 10" (mapReady)="onMapReady($event)">
+        <agm-map style="height: 100vh;" [latitude]="centro.lat" [longitude]="centro.lng" [disableDefaultUI]="true" [streetViewControl]="false" [zoomControl]="false" [fitBounds]="true" [fitBoundsPadding]="40" (mapReady)="onMapReady($event)">
             <!-- repartidores markers -->
             <agm-marker *ngFor="let item of repartidores; let i = index; trackBy:trackByRepartidor" [agmFitBounds]="true" (markerClick)="verInfoRepartidor(i, item)" [iconUrl]='{"url": icon_repartidor,"scaledSize": {"height": 40, "width": 30}}' [latitude]="item.lat"
                 [longitude]="item.lng" [animation]="'DROP'">
@@ -41,7 +41,7 @@
             <!-- Servicios markers -->
             <div *ngFor="let pendientes of pedidos; trackBy:trackByPendiente">
                 <agm-marker *ngFor="let item of pendientes.pedidos; let i = index; trackBy:trackByPedido" [agmFitBounds]="true" (markerClick)="verInfoPedido(i, item)" [iconUrl]='{"url": item.aceptado ? icon_cliente : icon_negocio,"scaledSize": {"height": 40, "width": 30}}' [latitude]="item.negocio.direccion.lat"
-                    [longitude]="item.negocio.direccion.lng" [animation]="'DROP'" [fitBoundsPadding]="200">
+                    [longitude]="item.negocio.direccion.lng" [animation]="'DROP'">
                     <agm-info-window [disableAutoPan]="true" [isOpen]="isInfoWindowPedido(i)">
                         <ion-item *ngIf="pedido" lines="none">
                             <ion-avatar style="margin-right: 1rem;">
@@ -72,9 +72,14 @@
             <ion-label color="light" class="label-region">{{item.referencia | titlecase}}</ion-label>
             <ion-badge slot="end" color="primary" *ngIf="item.pedidos">{{item.pedidos}}</ion-badge>
         </ion-item>
-        <ion-item class="region-item" lines="none">
+        <ion-item class="region-item" lines="none" *ngIf="!nueva_region">
             <ion-button (click)="nueva_region = true" slot="end" shape="round">
                 Nueva zona
+            </ion-button>
+        </ion-item>        
+        <ion-item class="region-item" lines="none" *ngIf="nueva_region">
+            <ion-button (click)="nueva_region = false" slot="end" shape="round">
+                Cancelar
             </ion-button>
         </ion-item>
     </ion-card>
@@ -92,6 +97,15 @@
         <div class="boton-nueva-zona" (click)="nuevaZona()">
             <span>+</span>
         </div>
+    </ion-card>
+
+    <ion-card class="background-gris card-pendientes" *ngIf="pedidoXregion.length > 0">
+        <ion-item *ngFor="let item of pedidoXregion; let i = index" class="region-item" detail>
+            <ion-label color="light" class="label-region">
+                <h2>{{item.negocio.nombreNegocio | titlecase}}</h2>
+                <p>{{item.createdAt | date:'d/MMMM/y h:mm a'}}</p>
+            </ion-label>
+        </ion-item>
     </ion-card>
 
 </ion-content>

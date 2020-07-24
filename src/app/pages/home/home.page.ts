@@ -29,6 +29,7 @@ export class HomePage implements OnInit{
   nueva_region = false
 
   pedidos: PedidoPendiente[] = []
+  pedidoXregion: Pedido[] = []
   pedido: Pedido
   
   repartidores: RepartidorPreview[]
@@ -78,17 +79,16 @@ export class HomePage implements OnInit{
   }
 
   async listenPedidos() {
-    const fecha = await this.pedidoService.formatDate(new Date())
-    this.pedidoService.listenPedidos(fecha).off('child_added')
-    this.pedidoService.listenPedidos(fecha).off('child_removed')
-    this.pedidoService.listenPedidos(fecha).off('child_changed')
-    this.pedidoAdded(fecha)
-    this.pedidoChanged(fecha)
-    this.pedidoRemoved(fecha)
+    this.pedidoService.listenPedidos().off('child_added')
+    this.pedidoService.listenPedidos().off('child_removed')
+    this.pedidoService.listenPedidos().off('child_changed')
+    this.pedidoAdded()
+    this.pedidoChanged()
+    this.pedidoRemoved()
   }
 
-  pedidoAdded(fecha: string) {
-    this.pedidoService.listenPedidos(fecha).on('child_added', snapshot => {
+  pedidoAdded() {
+    this.pedidoService.listenPedidos().on('child_added', snapshot => {
       const pedido: Pedido = snapshot.val()
       const iRegion = this.regiones.findIndex(r => r.referencia === pedido.region)
       if (this.pedidos.length === 0) {
@@ -111,8 +111,8 @@ export class HomePage implements OnInit{
     })
   }
 
-  pedidoRemoved(fecha: string) {
-    this.pedidoService.listenPedidos(fecha).on('child_removed', snapshot => {
+  pedidoRemoved() {
+    this.pedidoService.listenPedidos().on('child_removed', snapshot => {
       const pedido_eliminado: Pedido = snapshot.val()
       const iRegion = this.regiones.findIndex(r => r.referencia === pedido_eliminado.region)
       this.regiones[iRegion].pedidos -= 1
@@ -128,9 +128,10 @@ export class HomePage implements OnInit{
     })
   }
 
-  pedidoChanged(fecha: string) {
-    this.pedidoService.listenPedidos(fecha).on('child_changed', snapshot => {
+  pedidoChanged() {
+    this.pedidoService.listenPedidos().on('child_changed', snapshot => {
       const pedido_actualizado: Pedido = snapshot.val()
+      console.log(pedido_actualizado);
       const i = this.pedidos.findIndex(r => r.region === pedido_actualizado.region)
       const y = this.pedidos[i].pedidos.findIndex(p => p.id === pedido_actualizado.id)
       this.pedidos[i].pedidos[y] = pedido_actualizado
@@ -140,6 +141,10 @@ export class HomePage implements OnInit{
   // Acciones
   getRepartidores(i: number) {
     this.openedWindow = null
+    const iRegion = this.pedidos.findIndex(r => r.region === this.regiones[i].referencia)
+    if (this.pedidos[iRegion].pedidos.length > 0) {
+      this.pedidoXregion = this.pedidos[iRegion].pedidos
+    } else this.pedidoXregion = []
     if (this.repSub) this.repSub.unsubscribe()
     this.repSub = this.repartidoresService.getRepartidoresActivos(this.regiones[i].referencia)
     .subscribe((repartidores: RepartidorPreview[]) => {
