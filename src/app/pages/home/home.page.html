@@ -18,8 +18,6 @@
 </ion-header>
 
 <ion-content>
-
-
     <!-- Mapa -->
     <div style="overflow-y: hidden; height: 93vh; position: static;">
         <agm-map style="height: 100vh;" [latitude]="centro.lat" [longitude]="centro.lng" [disableDefaultUI]="true" [streetViewControl]="false" [zoomControl]="false" [fitBounds]="true" [fitBoundsPadding]="40" (mapReady)="onMapReady($event)">
@@ -100,10 +98,17 @@
     </ion-card>
 
     <ion-card class="background-gris card-pendientes" *ngIf="pedidoXregion.length > 0">
-        <ion-item *ngFor="let item of pedidoXregion; let i = index" class="region-item" detail>
+        <ion-item *ngFor="let item of pedidoXregion; let i = index" class="region-item" detail (click)="verPedido(item, i)">
+            <ion-thumbnail style="max-width: 1.75rem; height: auto; margin-right: 0.5rem; border-radius: 10px; overflow: hidden;">
+                <img [src]="item.negocio.logo" />
+            </ion-thumbnail>
             <ion-label color="light" class="label-region">
                 <h2>{{item.negocio.nombreNegocio | titlecase}}</h2>
-                <p>{{item.createdAt | date:'d/MMMM/y h:mm a'}}</p>
+                <p>{{item.createdAt | date:'EEEE d/MMMM/y h:mm a'}}</p>
+                <p *ngIf="!item.aceptado">Status: pendiente de aceptación</p>
+                <p *ngIf="item.aceptado && !item.repartidor">Status: pendiente de repartidor</p>
+                <p *ngIf="item.entrega === 'inmediato'">Entrega: inmediata</p>
+                <p *ngIf="item.entrega === 'planeado' && item.aceptado">Entrega: {{item.aceptado | date:'EEEE d/MMMM/y'}}</p>
             </ion-label>
         </ion-item>
     </ion-card>

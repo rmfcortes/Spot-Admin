@@ -30,7 +30,7 @@ export class PedidosService {
             day = '0' + day;
     
         resolve([year, month, day].join('-'))
-    });
+    })
   }
 
   asignarPedido(idRepartidor: string, pedido: Pedido) {

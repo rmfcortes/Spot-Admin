@@ -39,12 +39,12 @@ export class CommonService {
     this.loader = await this.loadingCtrl.create({
      spinner: 'dots',
      message
-    });
-    return await this.loader.present();
+    })
+    return await this.loader.present()
   }
 
   dismissLoading() {
-    if (this.loader) this.loader.dismiss();
+    if (this.loader) this.loader.dismiss()
   }
 
   async presentAlertAction(titulo: string, msn: string, btnOk: string, btnCancelar: string) {
@@ -69,10 +69,10 @@ export class CommonService {
             }
           }
         ]
-      });
+      })
 
-      await alert.present();
-    });
+      await alert.present()
+    })
   }
 
   async presentAlert(titulo, msn) {
@@ -86,9 +86,9 @@ export class CommonService {
           cssClass: 'secondary',
         }
       ]
-    });
+    })
 
-    await alert.present();
+    await alert.present()
   }
 
   async presentAlertRadio(msn, inputs) {
@@ -111,17 +111,17 @@ export class CommonService {
             }
           }
         ]
-      });
+      })
 
-      await alert.present();
-    });
+      await alert.present()
+    })
   }
 
   async presentToast(mensaje) {
     const toast = await this.toastController.create({
       message: mensaje,
       duration: 2000
-    });
+    })
     toast.present()
   }
 

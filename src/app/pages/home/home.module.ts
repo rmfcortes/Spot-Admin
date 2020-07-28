@@ -10,6 +10,10 @@ import { HomePageRoutingModule } from './home-routing.module';
 
 import { environment } from 'src/environments/environment.prod';
 
+import { LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeEsMX from '@angular/common/locales/es-MX';
+registerLocaleData(localeEsMX, 'es-MX');
 
 @NgModule({
   imports: [
@@ -22,6 +26,7 @@ import { environment } from 'src/environments/environment.prod';
     }),
     HomePageRoutingModule
   ],
-  declarations: [HomePage]
+  declarations: [HomePage],
+  providers: [{provide: LOCALE_ID, useValue: "es-MX"}]
 })
 export class HomePageModule {}

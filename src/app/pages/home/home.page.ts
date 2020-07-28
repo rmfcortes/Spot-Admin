@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { MenuController } from '@ionic/angular';
@@ -13,6 +13,7 @@ import { RegionService } from 'src/app/services/region.service';
 import { RepartidorPreview } from 'src/app/interface/repartidor.interface';
 import { Pedido, PedidoPendiente } from 'src/app/interface/pedido.interface';
 import { Region, Ubicacion } from 'src/app/interface/region.interface';
+import { AgmMap } from '@agm/core';
 
 @Component({
   selector: 'app-home',
@@ -49,6 +50,7 @@ export class HomePage implements OnInit{
   referencia: string
 
   constructor(
+    private ngZone: NgZone,
     private menu: MenuController,
     private repartidoresService: RepartidoresService,
     private pedidoService: PedidosService,
@@ -89,56 +91,77 @@ export class HomePage implements OnInit{
 
   pedidoAdded() {
     this.pedidoService.listenPedidos().on('child_added', snapshot => {
-      const pedido: Pedido = snapshot.val()
-      const iRegion = this.regiones.findIndex(r => r.referencia === pedido.region)
-      if (this.pedidos.length === 0) {
-        this.pedidos = [{
-          region: pedido.region,
-          pedidos: [pedido]
-        }]
-        this.regiones[iRegion].pedidos = 1
-      } else {
-        const i = this.pedidos.findIndex(p => p.region === pedido.region)
-        if (i >= 0) {
-          this.pedidos[i].pedidos.concat(pedido)
-          this.regiones[iRegion].pedidos++
-        }
-        else {
-          this.pedidos.push({region: pedido.region, pedidos: [pedido]})
+      this.ngZone.run(() => {
+        const pedido: Pedido = snapshot.val()
+        const iRegion = this.regiones.findIndex(r => r.referencia === pedido.region)
+        if (this.pedidos.length === 0) {
+          this.pedidos = [{
+            region: pedido.region,
+            pedidos: []
+          }]
+          this.pedidos[0].pedidos.push(pedido)
           this.regiones[iRegion].pedidos = 1
+        } else {
+          const i = this.pedidos.findIndex(p => p.region === pedido.region)
+          if (i >= 0) {
+            this.pedidos[i].pedidos = this.pedidos[i].pedidos.concat(pedido)
+            this.regiones[iRegion].pedidos++
+          }
+          else {
+            this.pedidos.push({region: pedido.region, pedidos: [pedido]})
+            this.regiones[iRegion].pedidos = 1
+          }
         }
-      }
+      })
     })
   }
 
   pedidoRemoved() {
     this.pedidoService.listenPedidos().on('child_removed', snapshot => {
-      const pedido_eliminado: Pedido = snapshot.val()
-      const iRegion = this.regiones.findIndex(r => r.referencia === pedido_eliminado.region)
-      this.regiones[iRegion].pedidos -= 1
-      this.pedidos = this.pedidos.map(p => {
-        const pedido: PedidoPendiente ={
-          pedidos: [],
-          region: p.region,
+      this.ngZone.run(() => {        
+        const pedido_eliminado: Pedido = snapshot.val()
+        const i = this.pedidoXregion.findIndex(p => p.id !== pedido_eliminado.id)
+        if (i >= 0) {
+          this.pedido = null
+          this.openedPedidoWindow = null
+          this.pedidoXregion.splice(i, 1)
         }
-        pedido.pedidos = p.pedidos.filter(pe => pe.id !== pedido_eliminado.id)
-        if (pedido.pedidos.length > 0) return pedido
-        else return null
+        const iRegion = this.regiones.findIndex(r => r.referencia === pedido_eliminado.region)
+        this.regiones[iRegion].pedidos -= 1
+        this.pedidos = this.pedidos.map(p => {
+          const pedido: PedidoPendiente ={
+            pedidos: [],
+            region: p.region,
+          }
+          pedido.pedidos = p.pedidos.filter(pe => pe.id !== pedido_eliminado.id)
+          if (pedido.pedidos.length > 0) return pedido
+          else return null
+        })
       })
     })
   }
 
   pedidoChanged() {
     this.pedidoService.listenPedidos().on('child_changed', snapshot => {
-      const pedido_actualizado: Pedido = snapshot.val()
-      console.log(pedido_actualizado);
-      const i = this.pedidos.findIndex(r => r.region === pedido_actualizado.region)
-      const y = this.pedidos[i].pedidos.findIndex(p => p.id === pedido_actualizado.id)
-      this.pedidos[i].pedidos[y] = pedido_actualizado
+      this.ngZone.run(() => {        
+        const pedido_actualizado: Pedido = snapshot.val()
+        console.log(pedido_actualizado);
+        const i = this.pedidos.findIndex(r => r.region === pedido_actualizado.region)
+        const y = this.pedidos[i].pedidos.findIndex(p => p.id === pedido_actualizado.id)
+        this.pedidos[i].pedidos[y] = pedido_actualizado
+      })
     })
   }
 
   // Acciones
+
+  verPedido(pedido: Pedido, i: number) {
+    var pt = new google.maps.LatLng(pedido.negocio.direccion.lat, pedido.negocio.direccion.lng)
+    this.map.setCenter(pt)
+    this.map.setZoom(17)
+    this.verInfoPedido(i, pedido)
+  }
+
   getRepartidores(i: number) {
     this.openedWindow = null
     const iRegion = this.pedidos.findIndex(r => r.region === this.regiones[i].referencia)
@@ -148,13 +171,15 @@ export class HomePage implements OnInit{
     if (this.repSub) this.repSub.unsubscribe()
     this.repSub = this.repartidoresService.getRepartidoresActivos(this.regiones[i].referencia)
     .subscribe((repartidores: RepartidorPreview[]) => {
-      this.repartidores = repartidores
-      if (this.repartidores.length === 0) {
-        const polygon = new google.maps.Polygon({paths: this.regiones[i].ubicacion})
-        this.map.fitBounds(this.getPolygonBounds(polygon))
-      } else {
-        this.getRadioRepartidores()
-      }
+      this.ngZone.run(() => {        
+        this.repartidores = repartidores
+        if (this.repartidores.length === 0) {
+          const polygon = new google.maps.Polygon({paths: this.regiones[i].ubicacion})
+          this.map.fitBounds(this.getPolygonBounds(polygon))
+        } else {
+          this.getRadioRepartidores()
+        }
+      })
     })
   }
 
@@ -185,14 +210,8 @@ export class HomePage implements OnInit{
   }
 
   nuevaZona() {
-    if (!this.ciudad) {
-      this.commonService.presentAlert('', 'Agrega el nombre de la ciudad')
-      return
-    }
-    if (!this.referencia) {
-      this.commonService.presentAlert('', 'Agrega una referencia')
-      return
-    }
+    if (!this.ciudad) return this.commonService.presentAlert('', 'Agrega el nombre de la ciudad')
+    if (!this.referencia) return this.commonService.presentAlert('', 'Agrega una referencia')
     this.initDrawingManager()
   }
 
@@ -255,18 +274,18 @@ export class HomePage implements OnInit{
       let sumX = 0
       let sumY = 0
       for (let i = 0; i < cobertura.length; i++) {
-        const point = cobertura[i];
-        const x = point.lat;
-        const y = point.lng;
-        sumX += x;
-        sumY += y;
+        const point = cobertura[i]
+        const x = point.lat
+        const y = point.lng
+        sumX += x
+        sumY += y
       }
       const centro: Ubicacion = {
         lat: sumX / cobertura.length,
         lng: sumY / cobertura.length
       }
       resolve(centro)
-    });
+    })
   }
 
   verInfoRepartidor(i: number, repartidor: RepartidorPreview) {
