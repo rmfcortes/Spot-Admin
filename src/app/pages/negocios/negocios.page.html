@@ -1,13 +1,25 @@
-<ion-header>
-  <ion-toolbar color="primary">
-      <ion-title>Negocios</ion-title>
+<ion-header *ngIf="!hideMainCol">
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Negocios</ion-title>
   </ion-toolbar>
+</ion-header>
+
+<ion-header *ngIf="hideMainCol && negocio_perfil">
+    <ion-toolbar style="border-bottom: 2px var(--ion-color-primary) solid;">
+        <ion-buttons slot="start">
+            <ion-icon slot="start" name="chevron-back" (click)="regresa()"></ion-icon>
+        </ion-buttons>
+        <ion-title>{{negocio_perfil.nombre}}</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-grid fixed>
       <ion-row>
-          <ion-col size="5">
+          <ion-col size-lg="5" size-xl="5" size-xs="12" size-sm="12" size-md="12" *ngIf="!hideMainCol" class="separate-scroll">
               <!-- Pick region -->
               <app-region-selector (region_selected)="setRegion($event)"></app-region-selector>
 
@@ -22,7 +34,7 @@
                   <ng-template #catTemp>
                       <ion-item (click)="verCategorias = true" class="pointer">
                           <ion-label color="medium" class="pointer" *ngIf="!categoria">Categorias</ion-label>
-                          <ion-label color="primary" class="pointer" *ngIf="categoria">{{categoria | titlecase}}</ion-label>
+                          <ion-label color="medium" class="pointer" *ngIf="categoria">{{categoria | titlecase}}</ion-label>
                           <ion-icon color="medium" slot="end" name="chevron-down"></ion-icon>
                       </ion-item>
                   </ng-template>
@@ -93,7 +105,7 @@
 
 
           <!-- Negocio Detalles -->
-          <ion-col size="7">
+          <ion-col size-lg="5" size-xl="5" size-xs="12" size-sm="12" size-md="12">
               <!-- Mapa -->
               <agm-map *ngIf="negocio_perfil" style="height: 25vh;" [latitude]="centro.lat" [longitude]="centro.lng" [disableDefaultUI]="true" [streetViewControl]="false" [zoomControl]="false" [fitBounds]="true" [maxZoom]="17" [fitBoundsPadding]="10">
                   <agm-marker [agmFitBounds]="true" [iconUrl]='{"url": icon_origen,"scaledSize": {"height": 40, "width": 30}}' [latitude]="negocio_perfil.direccion.lat" [longitude]="negocio_perfil.direccion.lng" [animation]="'DROP'">

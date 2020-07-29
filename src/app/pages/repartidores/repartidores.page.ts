@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-
 import { MenuController, ModalController } from '@ionic/angular';
+import { Component, OnInit } from '@angular/core';
+import { HostListener } from "@angular/core";
 
 import { FileViewerPage } from 'src/app/modals/file-viewer/file-viewer.page';
 import { RepartidorPage } from 'src/app/modals/repartidor/repartidor.page';
@@ -15,6 +15,15 @@ import { RepartidorPreview, RepartidorInfo } from 'src/app/interface/repartidor.
   styleUrls: ['./repartidores.page.scss'],
 })
 export class RepartidoresPage implements OnInit {
+
+  @HostListener('window:resize', ['$event'])
+  getScreenSize() {
+    this.scrHeight = window.innerHeight
+    this.scrWidth = window.innerWidth
+  }
+  scrHeight: number
+  scrWidth: number
+  hideMainCol = false
 
   regiones: string[] = []
   region = ''
@@ -38,7 +47,7 @@ export class RepartidoresPage implements OnInit {
     private menu: MenuController,
     private modalCtrl: ModalController,
     private repartidoresService: RepartidoresService,
-  ) { }
+  ) { this.getScreenSize() }
 
   // Info inicial
   ngOnInit() {
@@ -139,12 +148,18 @@ export class RepartidoresPage implements OnInit {
         preview,
         detalles
       }
+      if (this.scrWidth < 992) this.hideMainCol = true
       if (suspendido) this.suspendidoSel = true
       else this.suspendidoSel = false
       setTimeout(() => {
         this.enable_toogle = true
       }, 500)
     })
+  }
+
+  regresa() {
+    this.hideMainCol = false
+    this.repartidor = null
   }
 
   async setHabilitado(value: boolean) {

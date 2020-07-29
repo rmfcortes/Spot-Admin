@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { HostListener } from "@angular/core";
 
 import { NegocioPage } from 'src/app/modals/negocio/negocio.page';
 
@@ -16,6 +17,15 @@ import { CategoriaPage } from 'src/app/modals/categoria/categoria.page';
   styleUrls: ['./negocios.page.scss'],
 })
 export class NegociosPage implements OnInit {
+
+  @HostListener('window:resize', ['$event'])
+  getScreenSize() {
+    this.scrHeight = window.innerHeight
+    this.scrWidth = window.innerWidth
+}
+
+  scrHeight: number
+  scrWidth: number
 
   negocios: NegocioPreview[] = []
   negocios_unauthorized: NegocioPreview[] = []
@@ -44,11 +54,13 @@ export class NegociosPage implements OnInit {
   lastKey = ''
   noMore = false
 
+  hideMainCol = false
+
   constructor(
     private modalCtrl: ModalController,
     private negocioService: NegociosService,
     private commonService: CommonService,
-  ) { }
+  ) { this.getScreenSize() }
 
   ngOnInit() {
   }
@@ -103,7 +115,13 @@ export class NegociosPage implements OnInit {
     this.enable_toogle = false
     this.negocio_preview = negocio
     this.negocio_perfil = await this.negocioService.getDetallesNegocio(negocio.id)
+    if (this.scrWidth < 992) this.hideMainCol = true
     setTimeout(() => this.enable_toogle = true, 500)
+  }
+
+  regresa() {
+    this.negocio_perfil = null
+    this.hideMainCol = false
   }
 
   async nuevoNegocio() {

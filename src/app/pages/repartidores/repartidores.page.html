@@ -1,13 +1,25 @@
-<ion-header>
+<ion-header *ngIf="!hideMainCol">
     <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
         <ion-title>Repartidores</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-header *ngIf="hideMainCol && repartidor">
+    <ion-toolbar style="border-bottom: 2px var(--ion-color-primary) solid;">
+        <ion-buttons slot="start">
+            <ion-icon slot="start" name="chevron-back" (click)="regresa()"></ion-icon>
+        </ion-buttons>
+        <ion-title>{{repartidor.preview.nombre}}</ion-title>
     </ion-toolbar>
 </ion-header>
 
 <ion-content>
     <ion-grid fixed>
         <ion-row>
-            <ion-col size="8" class="separate-scroll">
+            <ion-col size-lg="8" size-xl="8" size-xs="12" size-sm="12" size-md="12" *ngIf="!hideMainCol" class="separate-scroll">
                 <!-- Seleccionar región -->
                 <app-region-selector (region_selected)="setRegion($event)"></app-region-selector>
 
@@ -15,6 +27,7 @@
                 <ion-card (click)="editRepartidor(null)" *ngIf="region">
                     <ion-item detail lines="none" class="pointer">
                         <ion-label color="medium" class="pointer">Nuevo repartidor</ion-label>
+                        <ion-icon color="primary" slot="end" name="add"></ion-icon>
                     </ion-item>
                 </ion-card>
 
@@ -43,7 +56,7 @@
                 </ion-button>
             </ion-col>
             <!-- Detalles taxista seleccionado -->
-            <ion-col size="4">
+            <ion-col size-lg="4" size-xl="4" size-xs="12" size-sm="12" size-md="12">
                 <div *ngIf="repartidor">
                     <div class="avatar">
                         <ion-img [src]="repartidor.preview.foto"></ion-img>

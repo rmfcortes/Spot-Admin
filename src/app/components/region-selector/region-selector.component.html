@@ -8,7 +8,7 @@
     <ng-template #regionesTemp>
         <ion-item (click)="verRegiones = true" class="pointer" lines="none">
             <ion-label color="medium" class="pointer" *ngIf="!region">Regiones</ion-label>
-            <ion-label color="primary" class="pointer" *ngIf="region">{{region | titlecase}}</ion-label>
+            <ion-label color="medium" class="pointer" *ngIf="region">{{region | titlecase}}</ion-label>
             <ion-icon color="medium" slot="end" name="chevron-down"></ion-icon>
         </ion-item>
     </ng-template>
