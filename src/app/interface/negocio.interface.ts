@@ -100,4 +100,5 @@ export interface FormaPago {
 export interface Categoria {
     categoria: string;
     foto: string;
+    cantidad: number;
 }

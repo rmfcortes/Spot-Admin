@@ -19,7 +19,8 @@ export class CategoriaPage implements OnInit {
 
   categoria: Categoria = {
     categoria: '',
-    foto: ''
+    foto: '',
+    cantidad: 0
   }
   subCategorias: string[] = []
   subCategoria = ''
