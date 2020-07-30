@@ -14,6 +14,8 @@ export interface Pedido {
     repartidor?: Repartidor;
     pendiente_repartidor: boolean;
     entregado?: number;
+    cancelado_by_negocio?: number;
+    razon_cancelacion?: string;
 }
 
 export interface HistorialPedido {

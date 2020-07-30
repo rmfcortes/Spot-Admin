@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuController } from '@ionic/angular';
+import { HostListener } from "@angular/core";
 
 import { HistorialService } from 'src/app/services/historial.service';
 import { CommonService } from 'src/app/services/common.service';
@@ -13,6 +14,15 @@ import { Ubicacion } from 'src/app/interface/region.interface';
   styleUrls: ['./historial.page.scss'],
 })
 export class HistorialPage implements OnInit {
+
+  @HostListener('window:resize', ['$event'])
+  getScreenSize() {
+    this.scrHeight = window.innerHeight
+    this.scrWidth = window.innerWidth
+  }
+  scrHeight: number
+  scrWidth: number
+  hideMainCol = false
 
   region: string
 
@@ -59,7 +69,7 @@ export class HistorialPage implements OnInit {
     private menu: MenuController,
     private historialService: HistorialService,
     private commonService: CommonService,
-  ) { }
+  ) { this.getScreenSize() }
 
   ngOnInit() {
     this.menu.enable(true)
@@ -221,6 +231,16 @@ export class HistorialPage implements OnInit {
     }).filter(h => h.pedidos.length > 0)
 
     this.negocios_ready = false
+  }
+
+  verPedido(pedido: Pedido) {
+    if (this.scrWidth < 992) this.hideMainCol = true
+    this.pedido = pedido
+  }
+
+  regresa() {
+    this.hideMainCol = false
+    this.pedido = null
   }
 
   verTodos() {

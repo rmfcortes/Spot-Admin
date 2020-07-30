@@ -9,6 +9,9 @@
         </h2>
         <h2 *ngIf="pedido_selected.entregado">Entregado:
             <ion-text color="medium">{{pedido_selected.entregado | date:'h:mm a'}}</ion-text>
+        </h2>        
+        <h2 *ngIf="pedido_selected.cancelado_by_negocio">Rechazado:
+            <ion-text color="medium">{{pedido_selected.razon_cancelacion | titlecase}}</ion-text>
         </h2>
         <h2 *ngIf="pedido_selected.entregado">Forma de pago:
             <ion-text color="medium">{{pedido_selected.formaPago.forma}}</ion-text>
@@ -16,8 +19,8 @@
         <h2 *ngIf="pedido_selected.entregado">Total:
             <ion-text color="medium">{{pedido_selected.total | currency:'CAD':'symbol-narrow':'1.0-2'}}</ion-text>
         </h2>        
-        <h2 *ngIf="pedido_selected.entregado">Comisión:
-            <ion-text color="medium" *ngIf="pedido_selected.comision">{{pedido_selected.comision | currency:'CAD':'symbol-narrow':'1.0-2'}}</ion-text>
+        <h2 *ngIf="pedido_selected.entregado && pedido_selected.comision">Comisión:
+            <ion-text color="medium">{{pedido_selected.comision | currency:'CAD':'symbol-narrow':'1.0-2'}}</ion-text>
         </h2>
     </ion-label>
 </ion-item>
