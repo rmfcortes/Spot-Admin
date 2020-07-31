@@ -65,7 +65,7 @@ export class HomePage implements OnInit{
 
   ionViewWillEnter() {
     this.menu.enable(true)
-    this.commonService.setTitle('Spot admin')
+    this.commonService.setTitle('Plaza soporte')
   }
 
   async getRegiones() {
@@ -165,7 +165,7 @@ export class HomePage implements OnInit{
   getRepartidores(i: number) {
     this.openedWindow = null
     const iRegion = this.pedidos.findIndex(r => r.region === this.regiones[i].referencia)
-    if (this.pedidos[iRegion].pedidos.length > 0) {
+    if (this.pedidos[iRegion] && this.pedidos[iRegion].pedidos.length > 0) {
       this.pedidoXregion = this.pedidos[iRegion].pedidos
     } else this.pedidoXregion = []
     if (this.repSub) this.repSub.unsubscribe()
