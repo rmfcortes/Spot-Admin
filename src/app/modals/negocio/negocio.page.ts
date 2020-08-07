@@ -142,7 +142,7 @@ export class NegocioPage implements OnInit, AfterViewInit {
         permitidos = 500
         break
     }
-    const agregados = this.negocio.subCategoria.length;
+    const agregados = this.negocio.subCategoria.length
     if (agregados > permitidos) {
       this.commonService.presentAlert('Límite de subCategorías', `Tu plan actual es ${this.negocio.plan}. Y sólo puedes
       agregar ${permitidos} subCategoria(s). Si deseas agregar más, contacta a tu vendedor y actualiza tu plan`)
@@ -161,7 +161,7 @@ export class NegocioPage implements OnInit, AfterViewInit {
       }
     }
     await this.commonService.presentLoading()
-
+    if (!this.negocio.repartidores_propios) this.negocio.formas_pago.terminal = false
     try {
       // Guarda fotos y obtiene urls
       this.negocio.portada = await this.negocioService.uploadFoto(this.base64Portada, 'portada')

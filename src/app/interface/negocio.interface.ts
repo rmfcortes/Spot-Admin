@@ -95,6 +95,7 @@ export interface InfoFunction {
 export interface FormaPago {
     efectivo: boolean;
     tarjeta: boolean;
+    terminal: boolean;
 }
 
 export interface Categoria {

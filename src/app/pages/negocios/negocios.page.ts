@@ -151,7 +151,8 @@ export class NegociosPage implements OnInit {
       entrega: '',
       formas_pago: {
         efectivo: false,
-        tarjeta: false
+        tarjeta: false,
+        terminal: false,
       },
       repartidores_propios: true,
     }

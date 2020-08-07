@@ -84,19 +84,6 @@
             <ion-input (keyup.enter)="$event.target.blur();" [(ngModel)]="negocio.whats" type="tel" name="whats" minlength="10" maxlength="10"></ion-input>
           </ion-item>
           <ion-item *ngIf="negocio.tipo === 'productos'">
-            <ion-label color="medium" class="ion-text-wrap">Formas de pago</ion-label>
-          </ion-item>
-          <div *ngIf="negocio.tipo === 'productos'" style="width: 80%; margin-left: 20%;">
-              <ion-item>
-                  <ion-label color="medium" class="ion-text-wrap">Efectivo</ion-label>
-                  <ion-checkbox (keyup.enter)="$event.target.blur();" [(ngModel)]="negocio.formas_pago.efectivo" name="efectivo"></ion-checkbox>
-              </ion-item>
-              <ion-item *ngIf="negocio.tipo === 'productos'">
-                  <ion-label color="medium" class="ion-text-wrap">Tarjeta</ion-label>
-                  <ion-checkbox (keyup.enter)="$event.target.blur();" [(ngModel)]="negocio.formas_pago.tarjeta" name="tarjeta"></ion-checkbox>
-              </ion-item>
-          </div>
-          <ion-item *ngIf="negocio.tipo === 'productos'">
             <ion-label color="medium">Tiempo de entrega</ion-label>
             <ion-select [(ngModel)]="negocio.entrega" color="medium" okText="Aceptar" cancelText="Cancelar" required name="entrega">
                 <ion-select-option value="inmediato">Mismo día</ion-select-option>
@@ -129,6 +116,23 @@
             <ion-label color="medium" position="floating" class="ion-text-wrap">Costo de envío</ion-label>
             <ion-input (keyup.enter)="$event.target.blur();" [(ngModel)]="negocio.envio" type="number" name="envio_fijo" minlength="1" required></ion-input>
           </ion-item>
+          <ion-item *ngIf="negocio.tipo === 'productos'">
+            <ion-label color="medium" class="ion-text-wrap">Formas de pago</ion-label>
+          </ion-item>
+          <div *ngIf="negocio.tipo === 'productos'" style="width: 80%; margin-left: 20%;">
+              <ion-item>
+                  <ion-label color="medium" class="ion-text-wrap">Efectivo</ion-label>
+                  <ion-checkbox (keyup.enter)="$event.target.blur();" [(ngModel)]="negocio.formas_pago.efectivo" name="efectivo"></ion-checkbox>
+              </ion-item>
+              <ion-item *ngIf="negocio.tipo === 'productos'">
+                  <ion-label color="medium" class="ion-text-wrap">Tarjeta</ion-label>
+                  <ion-checkbox (keyup.enter)="$event.target.blur();" [(ngModel)]="negocio.formas_pago.tarjeta" name="tarjeta"></ion-checkbox>
+              </ion-item>              
+              <ion-item *ngIf="negocio.tipo === 'productos' && negocio.repartidores_propios">
+                  <ion-label color="medium" class="ion-text-wrap">Terminal</ion-label>
+                  <ion-checkbox (keyup.enter)="$event.target.blur();" [(ngModel)]="negocio.formas_pago.tarjeta" name="tarjeta"></ion-checkbox>
+              </ion-item>
+          </div>
           <ion-item *ngIf="negocio.tipo === 'productos' && negocio.entrega === 'inmediato'">
               <ion-label color="medium" position="floating" class="ion-text-wrap">Tiempo de preparacion aprox. en minutos (opcional)</ion-label>
               <ion-input (keyup.enter)="$event.target.blur();" [(ngModel)]="negocio.preparacion" type="number" name="preparacion" minlength="1"></ion-input>
