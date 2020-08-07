@@ -179,7 +179,7 @@
           <ion-item *ngFor="let ped of historial.pedidos" class="resaltar" (click)="pedido = ped" [ngClass]="ped === pedido ? 'active' : 'initial'">
             <ion-label color="medium">{{ped.createdAt | date:'shortTime'}}</ion-label>
             <ion-label color="medium" *ngIf="scrWidth >= 992">{{ped.total | currency:'CAD':'symbol-narrow':'1.0-2'}}</ion-label>
-            <div [ngSwitch]="formaPago.tipo">
+            <div [ngSwitch]="ped.formaPago.tipo">
               <div *ngSwitchCase="'efectivo'">
                 <ion-icon slot="start" name="cash" color="success"></ion-icon>
 

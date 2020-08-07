@@ -1,8 +1,10 @@
 export interface Pedido {
+    aceptado: any;
     cliente: Cliente;
     createdAt: number;
     comision: number;
     id: string;
+    entrega: string;
     formaPago: FormaPago;
     productos: Producto[];
     total: number;
@@ -39,6 +41,7 @@ export interface Negocio {
     idNegocio: string;
     logo: string;
     nombreNegocio: string;
+    repartidores_propios: boolean;
     telefono: string;
 }
 

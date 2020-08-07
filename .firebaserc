@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "revistaojo-9a8d3"
+  },
+  "targets": {
+    "revistaojo-9a8d3": {
+      "hosting": {
+        "soporte": [
+          "plaza-admin-gral"
+        ],
+        "socios": [
+          "revistaojo-9a8d3"
+        ]
+      }
+    }
+  }
+}
