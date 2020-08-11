@@ -49,6 +49,8 @@ export class HomePage implements OnInit{
   ciudad: string
   referencia: string
 
+  hideMainCol = false
+
   constructor(
     private ngZone: NgZone,
     private menu: MenuController,

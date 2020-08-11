@@ -5,16 +5,6 @@
         </ion-buttons>
         <ion-title>Servicios activos</ion-title>
     </ion-toolbar>
-    <ion-toolbar color="primary" class="mobile">
-        <ion-segment value="'mapa'">
-            <ion-segment-button value="'lista'">
-                <ion-label>Lista</ion-label>
-            </ion-segment-button>
-            <ion-segment-button value="'mapa'">
-                <ion-label>Mapa</ion-label>
-            </ion-segment-button>
-        </ion-segment>
-    </ion-toolbar>
 </ion-header>
 
 <ion-content>
@@ -22,7 +12,7 @@
         <ion-row>
 
             <!-- Lista -->
-            <ion-col size-lg="4" size-xl="4" size-xs="12" size-sm="12" size-md="12">
+            <ion-col size-lg="4" size-xl="4" size-xs="12" size-sm="12" size-md="12" *ngIf="!hideMainCol">
                 <!-- Lista de regiones -->
                 <ion-card class="background-gris card-pendientes" *ngIf="map">
                     <ion-item *ngFor="let item of regiones; let i = index" class="region-item" detail (click)="getRepartidores(i)">

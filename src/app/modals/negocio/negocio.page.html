@@ -56,8 +56,8 @@
           </ion-item>
           <ion-item>
             <ion-label color="medium">Subcategoria</ion-label>
-            <ion-select multiple="true" [(ngModel)]="negocio.subCategoria" [disabled]="subCategorias.length <= 0" color="medium" okText="Aceptar" cancelText="Cancelar" required name="subCat">
-                <ion-select-option *ngFor="let item of subCategorias" [value]="item">{{item | titlecase}}</ion-select-option>
+            <ion-select multiple="true" [(ngModel)]="negocio.subCategoria" [disabled]="subCategorias.length <= 0" color="medium" okText="Aceptar" cancelText="Cancelar" required name="subCat" class="ion-text-wrap">
+                <ion-select-option *ngFor="let item of subCategorias" [value]="item.subCategoria">{{item.alias | titlecase}}</ion-select-option>
             </ion-select>
           </ion-item>
           <ion-item>
@@ -124,13 +124,13 @@
                   <ion-label color="medium" class="ion-text-wrap">Efectivo</ion-label>
                   <ion-checkbox (keyup.enter)="$event.target.blur();" [(ngModel)]="negocio.formas_pago.efectivo" name="efectivo"></ion-checkbox>
               </ion-item>
-              <ion-item *ngIf="negocio.tipo === 'productos'">
+              <ion-item>
                   <ion-label color="medium" class="ion-text-wrap">Tarjeta</ion-label>
                   <ion-checkbox (keyup.enter)="$event.target.blur();" [(ngModel)]="negocio.formas_pago.tarjeta" name="tarjeta"></ion-checkbox>
               </ion-item>              
-              <ion-item *ngIf="negocio.tipo === 'productos' && negocio.repartidores_propios">
+              <ion-item *ngIf="negocio.repartidores_propios">
                   <ion-label color="medium" class="ion-text-wrap">Terminal</ion-label>
-                  <ion-checkbox (keyup.enter)="$event.target.blur();" [(ngModel)]="negocio.formas_pago.tarjeta" name="tarjeta"></ion-checkbox>
+                  <ion-checkbox (keyup.enter)="$event.target.blur();" [(ngModel)]="negocio.formas_pago.terminal" name="terminal"></ion-checkbox>
               </ion-item>
           </div>
           <ion-item *ngIf="negocio.tipo === 'productos' && negocio.entrega === 'inmediato'">

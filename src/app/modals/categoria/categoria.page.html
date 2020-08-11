@@ -10,24 +10,15 @@
 </ion-header>
 
 <ion-content>
+
+  <!-- Nombre categoría -->
   <ion-card class="margen">
     <ion-item lines="none">
       <ion-input [(ngModel)]="categoria.categoria" name="categoria" type="text" placeholder="Nombre: Ej. Restaurantes, Automoriz, Viajes"></ion-input>
     </ion-item>
   </ion-card>
-  <ion-card class="margen">
-    <ion-item lines="none">
-      <ion-input (keyup.enter)="addSubCategoria()" [(ngModel)]="subCategoria" name="subcategoria" type="text" placeholder="SubCategorías: Ej. Hamburguesas, pizzas, refacciones..."></ion-input>
-      <ion-button slot="end" (click)="addSubCategoria()" [disabled]="!subCategoria">
-        Agregar
-        <ion-icon slot="end" name="add"></ion-icon>
-      </ion-button>
-    </ion-item>
-    <ion-item lines="none" *ngFor="let item of subCategorias; let i = index">
-      <ion-label>{{item}}</ion-label>
-      <ion-icon slot="end" name="trash" color="medium" (click)="borrarSubCategoria(i)"></ion-icon>
-    </ion-item>
-  </ion-card>
+
+  <!-- Icono categoría -->
   <ion-card class="margen" (click)="photo.click()" style="cursor: pointer;">
     <ion-item lines="none" detail>
       <ion-label color="medium">Seleccionar icono</ion-label>
@@ -35,7 +26,28 @@
       <ion-icon slot="end" color="success" name="checkmark-circle" *ngIf="file"></ion-icon>
     </ion-item>
   </ion-card>
-  <ion-button (click)="guardar()" expand="block" shape="round" class="margen" style="margin-top: 2rem;" [disabled] = "!categoria?.categoria || !file || !categoria || loading || subCategorias.length === 0">
+
+  <!-- Subcategorías -->
+  <ion-card class="margen">
+    <ion-item lines="none">
+      <ion-input (keyup.enter)="$event.target.blur()" [(ngModel)]="subCategoria" name="subcategoria" type="text" placeholder="SubCategoría: Ej. China"></ion-input>
+    </ion-item>    
+    <ion-item lines="none">
+      <ion-input (keyup.enter)="$event.target.blur()" [(ngModel)]="alias" name="alias" type="text" placeholder="Alias: Ej. Comida china"></ion-input>
+    </ion-item>    
+    <ion-item lines="none">
+      <ion-button class="gradient--" slot="end" (click)="addSubCategoria()" [disabled]="!subCategoria || !alias">
+        Agregar
+        <ion-icon slot="end" name="add"></ion-icon>
+      </ion-button>
+    </ion-item>
+    <ion-item lines="none" *ngFor="let item of subCategorias; let i = index">
+      <ion-label>{{item.alias}}</ion-label>
+      <ion-icon slot="end" name="trash" color="medium" (click)="borrarSubCategoria(i)"></ion-icon>
+    </ion-item>
+  </ion-card>
+
+  <ion-button (click)="guardar()" expand="block" shape="round" class="margen gradient--" style="margin-top: 2rem;" [disabled] = "!categoria?.categoria || !file || !categoria || loading || subCategorias.length === 0">
     Guardar cambios
     <ion-spinner name="dots" *ngIf="loading" style="margin-left: 1rem;"></ion-spinner>
   </ion-button>

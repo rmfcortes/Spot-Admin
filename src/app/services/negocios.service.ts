@@ -4,7 +4,7 @@ import { finalize } from 'rxjs/operators';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { AngularFireStorage } from '@angular/fire/storage';
 
-import { NegocioPreview, NegocioPerfil, Oferta, MasVendidos, InfoFunction, NegocioSuspendido, Busqueda, Categoria } from '../interface/negocio.interface';
+import { NegocioPreview, NegocioPerfil, Oferta, MasVendidos, InfoFunction, NegocioSuspendido, Busqueda, Categoria, SubCategoria } from '../interface/negocio.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -99,9 +99,9 @@ export class NegociosService {
     })
   }
 
-  getSubCategorias(categoria: string, region: string): Promise<string[]> {
+  getSubCategorias(categoria: string, region: string): Promise<SubCategoria[]> {
     return new Promise((resolve, reject) => {
-      const catSub = this.db.list(`categoriaSub/${region}/${categoria}`).valueChanges().subscribe((subCategorias: string[]) => {
+      const catSub = this.db.list(`categoriaSub/${region}/${categoria}`).valueChanges().subscribe((subCategorias: SubCategoria[]) => {
         catSub.unsubscribe()
         resolve(subCategorias)
       })
@@ -171,10 +171,12 @@ export class NegociosService {
     })
   }
 
-  setSubCategorias(categoria: Categoria, subCategorias: string[], region: string): Promise<boolean> {
+  setSubCategorias(categoria: Categoria, subCategorias: SubCategoria[], region: string): Promise<boolean> {
     return new Promise(async (resolve, reject) => {
       try {
-        await this.db.object(`categoriaSub/${region}/${categoria.categoria}`).set(subCategorias)
+        for (const sub of subCategorias) {
+          await this.db.object(`categoriaSub/${region}/${categoria.categoria}/${sub.subCategoria}`).set(sub)
+        }
         resolve(true)
       } catch (error) {
         reject(error)

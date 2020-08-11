@@ -3,7 +3,7 @@ import { ModalController } from '@ionic/angular';
 
 import { CropImageModal } from '../crop-image/crop-image.modal';
 
-import { Categoria } from 'src/app/interface/negocio.interface';
+import { Categoria, SubCategoria } from 'src/app/interface/negocio.interface';
 import { CommonService } from 'src/app/services/common.service';
 import { NegociosService } from 'src/app/services/negocios.service';
 
@@ -22,8 +22,9 @@ export class CategoriaPage implements OnInit {
     foto: '',
     cantidad: 0
   }
-  subCategorias: string[] = []
-  subCategoria = ''
+  subCategorias: SubCategoria[] = []
+  alias: string
+  subCategoria: string
   file: string
 
   loading = false
@@ -42,9 +43,16 @@ export class CategoriaPage implements OnInit {
   }
 
   addSubCategoria() {
-    this.subCategoria = this.subCategoria.trim()
+    this.alias = this.alias.trim().toLowerCase()
+    this.subCategoria = this.subCategoria.trim().toLowerCase()
     if (!this.subCategoria) return
-    this.subCategorias.unshift(this.subCategoria)
+    const sub: SubCategoria = {
+      cantidad: 0,
+      alias: this.alias,
+      subCategoria: this.subCategoria,
+    }
+    this.subCategorias.unshift(sub)
+    this.alias = ''
     this.subCategoria = ''
   }
 
@@ -53,6 +61,8 @@ export class CategoriaPage implements OnInit {
   }
 
   async guardar() {
+    this.categoria.categoria = this.categoria.categoria.trim().toLowerCase()
+    if (!this.categoria.categoria) return
     this.loading = true
     try {
       this.categoria.foto = await this.categoriaService.uploadIcon(this.file, this.categoria.categoria, this.region)

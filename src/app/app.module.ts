@@ -13,7 +13,7 @@ import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({

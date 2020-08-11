@@ -126,10 +126,9 @@ export class NegociosPage implements OnInit {
 
   async nuevoNegocio() {
     const negocio: NegocioPerfil = {
-      abierto: false,
       autorizado: true,
       categoria: this.categoria,
-      plan: 'basico',
+      plan: 'pro',
       correo: '',
       descripcion: '',
       direccion: {

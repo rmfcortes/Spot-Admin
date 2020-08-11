@@ -46,7 +46,7 @@ export class AppComponent {
     private platform: Platform,
     private authService: AuthService,
   ) {
-    this.initializeApp();
+    this.initializeApp()
   }
 
   initializeApp() {
@@ -55,7 +55,7 @@ export class AppComponent {
         document.addEventListener('backbutton', (event) => {
           event.preventDefault()
           event.stopPropagation()
-        }, false);
+        }, false)
       })
       // this.swService.checkUpdates()
     })

@@ -10,7 +10,7 @@ import { NegociosService } from 'src/app/services/negocios.service';
 import { CommonService } from 'src/app/services/common.service';
 import { RegionService } from 'src/app/services/region.service';
 
-import { NegocioPerfil } from 'src/app/interface/negocio.interface';
+import { NegocioPerfil, SubCategoria } from 'src/app/interface/negocio.interface';
 import { Region } from 'src/app/interface/region.interface';
 
 @Component({
@@ -32,7 +32,7 @@ export class NegocioPage implements OnInit, AfterViewInit {
   base64Portada = ''
   base64Logo = ''
 
-  subCategorias: string[] = []
+  subCategorias: SubCategoria[] = []
 
   constructor(
     private ngZone: NgZone,
@@ -161,7 +161,10 @@ export class NegocioPage implements OnInit, AfterViewInit {
       }
     }
     await this.commonService.presentLoading()
-    if (!this.negocio.repartidores_propios) this.negocio.formas_pago.terminal = false
+    if (!this.negocio.repartidores_propios) {
+      this.negocio.formas_pago.terminal = false
+      this.negocio.envio_gratis_pedMin = null
+    }
     try {
       // Guarda fotos y obtiene urls
       this.negocio.portada = await this.negocioService.uploadFoto(this.base64Portada, 'portada')

@@ -11,7 +11,6 @@ export interface NegocioPreview {
 }
 
 export interface NegocioPerfil {
-    abierto: boolean
     autorizado: boolean
     categoria: string
     contacto: string
@@ -102,4 +101,10 @@ export interface Categoria {
     categoria: string;
     foto: string;
     cantidad: number;
+}
+
+export interface SubCategoria {
+    alias: string;
+    cantidad: number;
+    subCategoria: string;
 }
