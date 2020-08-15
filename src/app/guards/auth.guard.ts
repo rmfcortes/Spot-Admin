@@ -29,8 +29,6 @@ export class AuthGuard implements CanActivate {
           if (!checked) await this.authService.checkFireAuthTest()
           return true
         } catch (error) {
-          console.log(error)
-          alert(error)
           this.router.navigate(['/login'])
           return false
         }
