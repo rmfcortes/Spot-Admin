@@ -153,7 +153,7 @@ export class NegociosPage implements OnInit {
         tarjeta: false,
         terminal: false,
       },
-      repartidores_propios: true,
+      repartidores_propios: false,
     }
     const modal = await this.modalCtrl.create({
       component: NegocioPage,
@@ -205,6 +205,10 @@ export class NegociosPage implements OnInit {
   loadMoreNegocios() {
     if (this.noMore) return
     this.getNegocios()
+  }
+
+  editNegocio(negocio: NegocioPerfil) {
+    this.negocioService.editNegocio(negocio)
   }
 
   // Tracks

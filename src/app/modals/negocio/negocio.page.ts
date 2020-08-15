@@ -161,6 +161,9 @@ export class NegocioPage implements OnInit, AfterViewInit {
       }
     }
     await this.commonService.presentLoading()
+    if (this.negocio.tipo === 'servicios') {
+      this.negocio.repartidores_propios = false
+    }
     if (!this.negocio.repartidores_propios) {
       this.negocio.formas_pago.terminal = false
       this.negocio.envio_gratis_pedMin = null

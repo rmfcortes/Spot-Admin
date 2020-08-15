@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { NegocioPerfil } from 'src/app/interface/negocio.interface';
 
 @Component({
@@ -9,9 +9,15 @@ import { NegocioPerfil } from 'src/app/interface/negocio.interface';
 export class NegocioSelectedComponent implements OnInit {
 
   @Input() negocio: NegocioPerfil
+  @Output() guardar = new EventEmitter<NegocioPerfil>()
+
 
   constructor() { }
 
   ngOnInit() {}
+
+  guardarCambios() {
+    this.guardar.emit(this.negocio)
+  }
 
 }

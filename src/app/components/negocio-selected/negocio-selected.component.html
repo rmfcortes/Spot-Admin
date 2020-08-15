@@ -2,25 +2,35 @@
     <ion-label color="primary" style="font-size: x-large;">Detalles</ion-label>
 </ion-item-divider>
 <ion-item lines="none">
-    <ion-label>
-        <h2>Nombre:
-            <ion-text color="medium">{{negocio.nombre | titlecase}}</ion-text>
-        </h2>
-        <h2>Direccion:
-            <ion-text color="medium">{{negocio.direccion.direccion | titlecase}}</ion-text>
-        </h2>
-        <h2>ID:
-            <ion-text color="medium">{{negocio.id}}</ion-text>
-        </h2>
-        <h2>Teléfono:
-            <ion-text color="medium">{{negocio.telefono}}</ion-text>
-        </h2>
-        <h2>Categoria:
-            <ion-text color="medium">{{negocio.categoria | titlecase}}</ion-text>
-        </h2>
-        <h2>Productos:
-            <ion-text color="medium">{{negocio.productos}}</ion-text>
-        </h2>
-    </ion-label>
-
+    <ion-label>Nombre:</ion-label>
+    <ion-input type="text" [(ngModel)]="negocio.nombre" name="nombre" color="medium"></ion-input>
+</ion-item>
+<ion-item lines="none">
+    <ion-label>Correo:</ion-label>
+    <ion-input type="text" [(ngModel)]="negocio.correo" name="correo" color="medium"></ion-input>
+</ion-item>
+<ion-item lines="none">
+    <ion-label>Dirección:</ion-label>
+    <ion-input type="text" [(ngModel)]="negocio.direccion.direccion" name="direccion" color="medium"></ion-input>
+</ion-item>
+<ion-item lines="none">
+    <ion-label>ID:</ion-label>
+    <ion-input type="text" [(ngModel)]="negocio.id" name="id" color="medium" [readonly]="true"></ion-input>
+</ion-item>
+<ion-item lines="none">
+    <ion-label>Teléfono:</ion-label>
+    <ion-input type="text" [(ngModel)]="negocio.telefono" name="telefono" color="medium"></ion-input>
+</ion-item>
+<ion-item lines="none">
+    <ion-label>Categoría:</ion-label>
+    <ion-input type="text" [(ngModel)]="negocio.categoria" name="categoria" color="medium"></ion-input>
+</ion-item>
+<ion-item lines="none">
+    <ion-label>Productos:</ion-label>
+    <ion-input type="text" [(ngModel)]="negocio.productos" name="productos" color="medium"></ion-input>
+</ion-item>
+<ion-item>
+    <ion-button (click)="guardarCambios()" shape="round" slot="end">
+        Guardar cambios
+    </ion-button>
 </ion-item>

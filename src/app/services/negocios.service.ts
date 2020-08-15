@@ -77,6 +77,10 @@ export class NegociosService {
     this.db.object(`perfiles/${idNegocio}/autorizado`).set(value)
   }
 
+  editNegocio(negocio: NegocioPerfil) {
+    this.db.object(`perfiles/${negocio.id}`).update(negocio)
+  }
+
   // Nuevo negocio 
 
   nuevoNegocio(negocio: NegocioPerfil) {

@@ -128,7 +128,7 @@
               </ion-card>
               <!-- Detalles -->
               <ion-card *ngIf="negocio_perfil">
-                  <app-negocio-selected [negocio]="negocio_perfil"></app-negocio-selected>
+                  <app-negocio-selected [negocio]="negocio_perfil" (guardar)="editNegocio($event)"></app-negocio-selected>
               </ion-card>
               <ion-card *ngIf="negocio_perfil">
                   <ion-item lines="none">
