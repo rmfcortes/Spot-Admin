@@ -10,14 +10,14 @@ import { ImageCroppedEvent } from 'ngx-image-cropper';
 })
 export class CropImageModal implements OnInit {
 
-  @Input() imageChangedEvent;
-  @Input() maintainAspectRatio: boolean;
-  @Input() aspect;
+  @Input() maintainAspectRatio: boolean
+  @Input() imageChangedEvent
+  @Input() aspect
 
 
-  croppedImage: any = '';
-  preview = false;
-  imageReady = false;
+  croppedImage: any = ''
+  imageReady = false
+  preview = false
 
 
   constructor(
@@ -28,19 +28,19 @@ export class CropImageModal implements OnInit {
   }
 
   imageLoaded() {
-    this.imageReady = true;
+    this.imageReady = true
   }
 
   imageCropped(event: ImageCroppedEvent) {
-    this.croppedImage = event.base64;
+    this.croppedImage = event.base64
   }
 
   save() {
-    this.modalCtrl.dismiss(this.croppedImage);
+    this.modalCtrl.dismiss(this.croppedImage)
   }
 
   close() {
-    this.modalCtrl.dismiss();
+    this.modalCtrl.dismiss()
   }
 
 }

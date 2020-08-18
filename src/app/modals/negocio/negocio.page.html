@@ -17,7 +17,7 @@
           <ion-col size="6">
             <div style="text-align: center; cursor: pointer;" (click)="foto1.click()">
               <img [src]="negocio.portada ? negocio.portada : noPortada" style="width: 50%;" /> <br>
-              <input style="display: none" (change)="cropImage($event, 1/.33, true, 60, 450)" type="file" #foto1> <br>
+              <input style="display: none" (change)="cropImage($event, 1/.33, true, 90, 600)" type="file" #foto1> <br>
               <ion-label color="medium" *ngIf="!negocio.portada" class="ion-text-wrap">Elige tu portada. Toma una fotografía del negocio o producto estrella</ion-label>
             </div>
           </ion-col>
